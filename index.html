@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="AI-powered emergency medical guidance for Africa. Get instant diagnosis and life-saving first aid when doctors aren't available. Works offline. Free emergency childbirth guide, snake bite treatment, and 50+ medical protocols.">
+    <meta name="keywords" content="AI medical diagnosis Africa, emergency health Nigeria, AI doctor chatbot, digital health platform, emergency childbirth guide, symptom checker, offline medical AI, where there is no doctor">
+    <meta name="author" content="ProxiHealth">
+    
+    <!-- Open Graph (Social Sharing) -->
+    <meta property="og:title" content="ProxiHealth - AI Emergency Medical Guidance for Africa">
+    <meta property="og:description" content="Life-saving AI medical advice when doctors aren't nearby. Free, works offline, covers 50+ emergencies including childbirth.">
+    <meta property="og:type" content="website">
+    
+    <title>ProxiHealth - AI Emergency Medical Guidance | Free Health Platform Africa</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Disclaimer Modal -->
+    <div id="disclaimerModal" class="modal">
+        <div class="modal-content">
+            <h2>Before You Start</h2>
+            <p>ProxiHealth uses <strong>AI-powered medical intelligence</strong> to provide emergency guidance based on WHO protocols and medical best practices.</p>
+            <div class="disclaimer-box">
+                <p><strong>This AI tool does NOT replace professional medical care.</strong></p>
+                <ul>
+                    <li>Always call emergency services (112) for life-threatening situations</li>
+                    <li>Seek professional medical attention when possible</li>
+                    <li>This AI guidance is for situations where immediate help is unavailable</li>
+                </ul>
+            </div>
+            <p class="privacy-note">🔒 Your data is private. No information is stored or shared.</p>
+            <button id="disclaimerAccept" class="btn-primary">I Understand - Continue</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="nav">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <rect x="14" y="6" width="4" height="20" rx="2" fill="currentColor"/>
+                            <rect x="6" y="14" width="20" height="4" rx="2" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">ProxiHealth</span>
+                </div>
+                <nav>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#about">About</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">
+                <span class="badge-pulse"></span>
+                AI-Powered Emergency Care
+            </div>
+            
+            <h1>Medical emergency?<br>Get AI guidance in seconds.</h1>
+            
+            <p class="hero-subtitle">Advanced medical AI analyzes your symptoms and provides evidence-based first aid when doctors aren't available. From snake bites to emergency childbirth—get life-saving instructions instantly.</p>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="symptomSearch" 
+                        class="search-input" 
+                        placeholder="Describe emergency: snake bite, fever, bleeding, childbirth..."
+                        autocomplete="off"
+                    >
+                </div>
+                <button id="searchBtn" class="search-btn">
+                    <span>Get AI Guidance</span>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>or select emergency type</span>
+            </div>
+
+            <!-- Emergency Cards -->
+            <div class="emergency-grid">
+                <button class="emergency-card critical" id="criticalBtn">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon critical-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 9v4M12 17h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Critical Emergency</h3>
+                    <p>Severe bleeding • Not breathing • Unconscious • Emergency childbirth • Severe chest pain • Snake bite</p>
+                    <div class="card-badge critical-badge">Immediate Response</div>
+                </button>
+
+                <button class="emergency-card non-urgent" id="nonUrgentBtn">
+                    <div class="card-icon-wrapper">
+                        <div class="card-icon non-urgent-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 12h6M9 16h6M12 3v2M6.31 6.31L4.9 4.9M3 12H1M6.31 17.69l-1.41 1.41M12 19v2M17.69 17.69l1.41 1.41M21 12h2M17.69 6.31l1.41-1.41" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3>Non-Urgent Symptoms</h3>
+                    <p>Fever • Headache • Rash • Stomach pain • Cough • Minor injuries • General medical questions</p>
+                    <div class="card-badge non-urgent-badge">AI Assessment</div>
+                </button>
+            </div>
+
+            <!-- Trust Indicators -->
+            <div class="trust-indicators">
+                <div class="trust-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13.5 4L6 11.5 2.5 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>100% Free</span>
+                </div>
+                <div class="trust-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13.5 4L6 11.5 2.5 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>No Login Required</span>
+                </div>
+                <div class="trust-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13.5 4L6 11.5 2.5 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Works Offline</span>
+                </div>
+                <div class="trust-item">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13.5 4L6 11.5 2.5 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Private & Secure</span>
+                </div>
+            </div>
+
+            <!-- AI Features Highlight -->
+            <div class="ai-features">
+                <div class="ai-feature">
+                    <div class="ai-icon">🤖</div>
+                    <p><strong>Advanced Medical AI</strong><br>Google Gemini 2.0 analyzes symptoms like a doctor</p>
+                </div>
+                <div class="ai-feature">
+                    <div class="ai-icon">📚</div>
+                    <p><strong>50+ Emergency Protocols</strong><br>From childbirth to snake bites, burn care to CPR</p>
+                </div>
+                <div class="ai-feature">
+                    <div class="ai-icon">🌍</div>
+                    <p><strong>Built for Africa</strong><br>Works in remote areas with limited connectivity</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-section">
+        <div class="container">
+            <h2>How ProxiHealth AI Works</h2>
+            <p class="section-subtitle">From symptom to action plan in 30 seconds</p>
+            
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">💬</div>
+                    <h3>Describe Your Emergency</h3>
+                    <p>Tell our AI what's wrong in simple terms, or select from 50+ common emergencies including childbirth complications</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🧠</div>
+                    <h3>AI Medical Analysis</h3>
+                    <p>Advanced AI evaluates severity, checks against WHO protocols, and identifies the appropriate first aid response</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">📋</div>
+                    <h3>Step-by-Step Action Plan</h3>
+                    <p>Get clear, numbered instructions on what to do right now, when to seek help, and how to stabilize until care arrives</p>
+                </div>
+            </div>
+
+            <!-- Coverage Grid -->
+            <div class="coverage-section">
+                <h3>AI-Powered Guidance Covers:</h3>
+                <div class="coverage-grid">
+                    <div class="coverage-item">
+                        <span class="coverage-icon">👶</span>
+                        <span>Emergency Childbirth</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-icon">🩸</span>
+                        <span>Severe Bleeding</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-icon">🐍</span>
+                        <span>Snake & Animal Bites</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-icon">🔥</span>
+                        <span>Burns & Scalds</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-icon">🫁</span>
+                        <span>Breathing Problems</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-icon">💊</span>
+                        <span>Poisoning</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-icon">🤕</span>
+                        <span>Head Injuries</span>
+                    </div>
+                    <div class="coverage-item">
+                        <span class="coverage-icon">🦴</span>
+                        <span>Fractures</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Credibility Badges -->
+            <div class="badges">
+                <div class="badge">
+                    <div class="badge-icon">✓</div>
+                    <div class="badge-content">
+                        <strong>WHO Guidelines</strong>
+                        <span>Evidence-based protocols</span>
+                    </div>
+                </div>
+                <div class="badge">
+                    <div class="badge-icon">✓</div>
+                    <div class="badge-content">
+                        <strong>Medical AI</strong>
+                        <span>Google Gemini 2.0</span>
+                    </div>
+                </div>
+                <div class="badge">
+                    <div class="badge-icon">✓</div>
+                    <div class="badge-content">
+                        <strong>Offline Capable</strong>
+                        <span>50+ protocols cached locally</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2>Built for Africa, Powered by AI</h2>
+                <p class="about-lead">ProxiHealth brings AI-powered emergency medical guidance to communities where healthcare access is limited. Inspired by "Where There Is No Doctor," we're using artificial intelligence to democratize life-saving knowledge across the continent.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat">
+                        <div class="stat-number">500M+</div>
+                        <div class="stat-label">Africans Without Healthcare Access</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Emergency Protocols</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">24/7</div>
+                        <div class="stat-label">AI Availability</div>
+                    </div>
+                </div>
+
+                <p class="about-mission">Our mission: Ensure that no one dies from a preventable emergency because they didn't know what to do. Whether it's a mother giving birth alone, a farmer bitten by a snake, or a child choking—ProxiHealth's AI is there to guide you.</p>
+                
+                <p class="about-location">🌍 Pan-African Health Technology • Starting in Nigeria 🇳🇬</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                <rect x="14" y="6" width="4" height="20" rx="2" fill="currentColor"/>
+                                <rect x="6" y="14" width="20" height="4" rx="2" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span class="logo-text">ProxiHealth</span>
+                    </div>
+                    <p class="footer-tagline">AI emergency medical guidance for everyone, everywhere.</p>
+                </div>
+                
+                <div class="footer-disclaimer">
+                    <p><strong>⚠️ Medical Disclaimer</strong></p>
+                    <p>ProxiHealth is an AI-powered educational tool, not a substitute for professional medical diagnosis or treatment. Always seek professional medical care when available. In life-threatening emergencies, call 112 (Nigeria Emergency Services) immediately.</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 ProxiHealth. Emergency care guidance powered by AI.</p>
+                <p class="footer-tech">Built with Google Gemini AI • Offline-First • Privacy-Focused</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+                      </html>
