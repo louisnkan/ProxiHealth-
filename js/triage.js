@@ -177,54 +177,292 @@ document.addEventListener('DOMContentLoaded', function() {
     // STEP 3: AI Assessment (Placeholder for Phase 3)
     // ============================================
     
-    function simulateAssessment() {
+    // Phase 3: Real symptom assessment using offline medical data
+    async function simulateAssessment() {
         const loadingState = document.getElementById('assessmentLoading');
         const resultDiv = document.getElementById('assessmentResult');
         const resultBody = document.getElementById('resultBody');
         
-        // Show loading for 2 seconds
-        setTimeout(() => {
-            loadingState.style.display = 'none';
-            resultDiv.style.display = 'block';
+        try {
+            // Load offline medical data
+            const response = await fetch('data/offline-tree.json');
+            const medicalData = await response.json();
             
-            // Placeholder content (will be replaced by AI in Phase 3)
-            resultBody.innerHTML = `
-                <div style="background: var(--soft-cream); padding: var(--space-4); border-radius: var(--radius-md); margin-bottom: var(--space-3);">
-                    <h3 style="margin-bottom: var(--space-2); color: var(--charcoal);">Assessment Summary</h3>
-                    <p style="color: var(--gray-dark); margin-bottom: var(--space-2);">
-                        <strong>Symptoms:</strong> ${selectedSymptoms.map(formatSymptomName).join(', ')}
+            // Analyze symptoms
+            const assessment = analyzeSymptoms(selectedSymptoms, assessmentData, medicalData);
+            
+            setTimeout(() => {
+                loadingState.style.display = 'none';
+                resultDiv.style.display = 'block';
+                resultBody.innerHTML = renderAssessment(assessment);
+            }, 1500);
+            
+        } catch (error) {
+            console.error('Error loading assessment:', error);
+            setTimeout(() => {
+                loadingState.style.display = 'none';
+                resultDiv.style.display = 'block';
+                resultBody.innerHTML = renderErrorAssessment();
+            }, 1500);
+        }
+    }
+    
+    function analyzeSymptoms(symptoms, data, medicalData) {
+        // Simple symptom matching algorithm (Phase 3 offline version)
+        // In Phase 3.5, this will be enhanced with Gemini AI
+        
+        const assessment = {
+            symptoms: symptoms,
+            duration: data.duration,
+            severity: data.severity,
+            possibleConditions: [],
+            urgencyLevel: 'moderate',
+            recommendations: [],
+            warnings: []
+        };
+        
+        // Determine urgency based on severity and symptom combinations
+        if (data.severity >= 8) {
+            assessment.urgencyLevel = 'high';
+            assessment.warnings.push('Severe symptoms detected. Consider seeking medical attention today.');
+        } else if (data.severity >= 5) {
+            assessment.urgencyLevel = 'moderate';
+        } else {
+            assessment.urgencyLevel = 'low';
+        }
+        
+        // Check for concerning symptom combinations
+        const concerningCombos = [
+            { combo: ['fever', 'headache', 'body-ache'], condition: 'Possible malaria or viral infection', urgent: true },
+            { combo: ['fever', 'cough', 'fatigue'], condition: 'Possible respiratory infection', urgent: false },
+            { combo: ['stomach-pain', 'vomiting', 'diarrhea'], condition: 'Possible gastroenteritis (stomach infection)', urgent: false },
+            { combo: ['headache', 'dizziness', 'nausea'], condition: 'Possible dehydration or migraine', urgent: false },
+            { combo: ['rash', 'fever'], condition: 'Possible viral infection or allergic reaction', urgent: true }
+        ];
+        
+        concerningCombos.forEach(item => {
+            const hasAllSymptoms = item.combo.every(s => symptoms.includes(s));
+            if (hasAllSymptoms) {
+                assessment.possibleConditions.push({
+                    name: item.condition,
+                    urgent: item.urgent
+                });
+                if (item.urgent) {
+                    assessment.urgencyLevel = 'high';
+                }
+            }
+        });
+        
+        // If no specific combination matched, add general guidance
+        if (assessment.possibleConditions.length === 0) {
+            if (symptoms.includes('fever')) {
+                assessment.possibleConditions.push({ name: 'Fever - possible infection', urgent: false });
+            }
+            if (symptoms.includes('headache')) {
+                assessment.possibleConditions.push({ name: 'Headache - monitor for severity', urgent: false });
+            }
+        }
+        
+        // Generate recommendations
+        assessment.recommendations = generateRecommendations(symptoms, data.severity, data.duration);
+        
+        return assessment;
+    }
+    
+    function generateRecommendations(symptoms, severity, duration) {
+        const recs = [];
+        
+        // Fever recommendations
+        if (symptoms.includes('fever')) {
+            recs.push({
+                title: 'Manage Fever',
+                actions: [
+                    'Take paracetamol (500mg-1000mg) every 6-8 hours',
+                    'Drink plenty of water (at least 2 liters per day)',
+                    'Use cool compress on forehead',
+                    'Rest in cool, well-ventilated room'
+                ]
+            });
+            recs.push({
+                title: 'When to Seek Help',
+                actions: [
+                    'Fever above 39°C (102°F) for more than 3 days',
+                    'Fever with severe headache and neck stiffness',
+                    'Fever with difficulty breathing',
+                    'Fever with confusion or seizures'
+                ]
+            });
+        }
+        
+        // Stomach issues
+        if (symptoms.includes('stomach-pain') || symptoms.includes('diarrhea') || symptoms.includes('nausea')) {
+            recs.push({
+                title: 'Manage Digestive Symptoms',
+                actions: [
+                    'Drink oral rehydration solution (ORS) or clean water',
+                    'Eat bland foods: rice, banana, toast',
+                    'Avoid dairy, spicy, or fatty foods',
+                    'Rest and avoid strenuous activity'
+                ]
+            });
+            recs.push({
+                title: 'Danger Signs - Seek Help If:',
+                actions: [
+                    'Blood in stool or vomit',
+                    'Severe dehydration (dry mouth, no urine for 8+ hours)',
+                    'Severe abdominal pain that worsens',
+                    'Symptoms lasting more than 3 days'
+                ]
+            });
+        }
+        
+        // General hydration
+        if (symptoms.includes('fever') || symptoms.includes('diarrhea') || symptoms.includes('vomiting')) {
+            recs.push({
+                title: 'Stay Hydrated',
+                actions: [
+                    'Drink small amounts frequently (every 15-30 minutes)',
+                    'ORS is best, or water with pinch of salt and sugar',
+                    'Avoid alcohol and caffeine',
+                    'Monitor urine color (should be light yellow)'
+                ]
+            });
+        }
+        
+        // If high severity or long duration
+        if (severity >= 7 || duration === 'week+') {
+            recs.push({
+                title: '🚨 Medical Attention Recommended',
+                actions: [
+                    'Your symptoms are severe or prolonged',
+                    'Visit a clinic or hospital for proper diagnosis',
+                    'Bring list of symptoms and medications taken',
+                    'Call 112 if symptoms worsen suddenly'
+                ]
+            });
+        }
+        
+        return recs;
+    }
+    
+    function renderAssessment(assessment) {
+        let html = `
+            <div style="background: var(--soft-cream); padding: var(--space-4); border-radius: var(--radius-lg); margin-bottom: var(--space-4);">
+                <h3 style="margin-bottom: var(--space-3); color: var(--charcoal);">📋 Assessment Summary</h3>
+                <div style="background: white; padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                    <p style="color: var(--gray-dark); margin-bottom: var(--space-1);">
+                        <strong>Symptoms:</strong> ${assessment.symptoms.map(formatSymptomName).join(', ')}
                     </p>
-                    <p style="color: var(--gray-dark); margin-bottom: var(--space-2);">
-                        <strong>Duration:</strong> ${formatDuration(assessmentData.duration)}
+                    <p style="color: var(--gray-dark); margin-bottom: var(--space-1);">
+                        <strong>Duration:</strong> ${formatDuration(assessment.duration)}
                     </p>
                     <p style="color: var(--gray-dark);">
-                        <strong>Severity:</strong> ${assessmentData.severity}/10
+                        <strong>Severity:</strong> ${assessment.severity}/10
                     </p>
                 </div>
-                
-                <div style="background: var(--amber-light); padding: var(--space-4); border-radius: var(--radius-md); margin-bottom: var(--space-3); border-left: 4px solid var(--amber-orange);">
-                    <p style="font-weight: 600; margin-bottom: var(--space-2);">⚠️ AI Integration Coming in Phase 3</p>
-                    <p style="color: var(--gray-dark);">This is where AI-powered medical assessment will appear with:</p>
-                    <ul style="margin-top: var(--space-2); margin-left: var(--space-3); color: var(--gray-dark);">
-                        <li>Likely conditions based on symptoms</li>
-                        <li>Recommended care actions</li>
-                        <li>Warning signs to watch for</li>
-                        <li>When to seek professional help</li>
-                        <li>Home care instructions</li>
-                    </ul>
+        `;
+        
+        // Urgency indicator
+        const urgencyColors = {
+            high: { bg: 'var(--coral-light)', border: 'var(--coral-red)', text: 'var(--coral-red)' },
+            moderate: { bg: 'var(--amber-light)', border: 'var(--amber-orange)', text: '#d97706' },
+            low: { bg: 'var(--mint-green)', border: 'var(--sage-green)', text: 'var(--forest-green)' }
+        };
+        
+        const urgencyLabels = {
+            high: '🚨 High Urgency - Seek Medical Attention',
+            moderate: '⚠️ Moderate - Monitor Closely',
+            low: '✓ Low Urgency - Home Care Recommended'
+        };
+        
+        const colors = urgencyColors[assessment.urgencyLevel];
+        
+        html += `
+                <div style="background: ${colors.bg}; padding: var(--space-3); border-radius: var(--radius-md); border-left: 4px solid ${colors.border};">
+                    <p style="font-weight: 700; color: ${colors.text}; font-size: 1.125rem;">
+                        ${urgencyLabels[assessment.urgencyLevel]}
+                    </p>
                 </div>
-                
-                <div style="background: var(--mint-green); padding: var(--space-4); border-radius: var(--radius-md);">
-                    <p style="font-weight: 600; margin-bottom: var(--space-2); color: var(--forest-green);">✓ Phase 2 Complete</p>
-                    <p style="color: var(--gray-dark);">Symptom collection is working perfectly. Phase 3 will add:</p>
-                    <ul style="margin-top: var(--space-2); margin-left: var(--space-3); color: var(--gray-dark);">
-                        <li>Google Gemini API analysis</li>
-                        <li>Offline symptom-to-diagnosis tree</li>
-                        <li>Evidence-based care recommendations</li>
-                    </ul>
+            </div>
+        `;
+        
+        // Possible conditions
+        if (assessment.possibleConditions.length > 0) {
+            html += `
+                <div style="background: white; border: 2px solid var(--gray-light); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
+                    <h3 style="margin-bottom: var(--space-3); color: var(--charcoal);">🔍 Possible Conditions</h3>
+                    ${assessment.possibleConditions.map(condition => `
+                        <div style="background: var(--soft-cream); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
+                            <p style="font-weight: 600; color: var(--charcoal);">
+                                ${condition.urgent ? '⚠️ ' : ''}${condition.name}
+                            </p>
+                        </div>
+                    `).join('')}
+                    <p style="margin-top: var(--space-3); color: var(--gray-dark); font-size: 0.875rem; font-style: italic;">
+                        Note: This is an educational assessment. Professional diagnosis is recommended.
+                    </p>
                 </div>
             `;
-        }, 2000);
+        }
+        
+        // Recommendations
+        if (assessment.recommendations.length > 0) {
+            html += `
+                <div style="background: white; border: 2px solid var(--sage-green); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
+                    <h3 style="margin-bottom: var(--space-3); color: var(--forest-green);">💊 Care Recommendations</h3>
+            `;
+            
+            assessment.recommendations.forEach(rec => {
+                const isDanger = rec.title.includes('Danger') || rec.title.includes('🚨');
+                const bgColor = isDanger ? 'var(--coral-light)' : 'var(--mint-green)';
+                const borderColor = isDanger ? 'var(--coral-red)' : 'var(--sage-green)';
+                
+                html += `
+                    <div style="background: ${bgColor}; padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-3); border-left: 4px solid ${borderColor};">
+                        <h4 style="margin-bottom: var(--space-2); color: var(--charcoal); font-size: 1.0625rem;">${rec.title}</h4>
+                        <ul style="margin: 0; padding-left: var(--space-4); color: var(--gray-dark);">
+                            ${rec.actions.map(action => `<li style="margin-bottom: var(--space-1); line-height: 1.6;">${action}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+        }
+        
+        // Offline notice
+        html += `
+            <div style="background: var(--soft-cream); padding: var(--space-3); border-radius: var(--radius-md); text-align: center;">
+                <p style="color: var(--gray-dark); font-size: 0.875rem;">
+                    ✓ This assessment was generated using offline medical protocols
+                </p>
+            </div>
+        `;
+        
+        return html;
+    }
+    
+    function renderErrorAssessment() {
+        return `
+            <div style="background: var(--coral-light); padding: var(--space-4); border-radius: var(--radius-lg); margin-bottom: var(--space-4); border: 2px solid var(--coral-red);">
+                <h3 style="color: var(--coral-red); margin-bottom: var(--space-2);">⚠️ Unable to Complete Assessment</h3>
+                <p style="color: var(--gray-dark); margin-bottom: var(--space-3);">
+                    We couldn't load the medical database. This may be due to a connection issue.
+                </p>
+                <p style="color: var(--gray-dark); margin-bottom: var(--space-3);">
+                    <strong>Your symptoms:</strong> ${selectedSymptoms.map(formatSymptomName).join(', ')}
+                </p>
+                <div style="background: white; padding: var(--space-3); border-radius: var(--radius-md);">
+                    <p style="font-weight: 600; margin-bottom: var(--space-2); color: var(--charcoal);">General Guidance:</p>
+                    <ul style="margin: 0; padding-left: var(--space-4); color: var(--gray-dark);">
+                        <li>If symptoms are severe, call 112 or visit nearest clinic</li>
+                        <li>Stay hydrated and rest</li>
+                        <li>Monitor symptoms - if they worsen, seek help immediately</li>
+                        <li>Try reloading this page when connection improves</li>
+                    </ul>
+                </div>
+            </div>
+        `;
     }
     
     function formatDuration(duration) {
