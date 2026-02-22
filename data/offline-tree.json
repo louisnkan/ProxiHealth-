@@ -1,0 +1,503 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-02-22",
+  "protocols": {
+    "childbirth": {
+      "title": "Emergency Childbirth Delivery",
+      "severity": "critical",
+      "category": "obstetric",
+      "estimated_time": "10-30 minutes",
+      "disclaimer": "This guidance is for emergency situations where professional help is unavailable. Transport to hospital immediately after delivery.",
+      "emergency_contact": {
+        "primary": "112",
+        "alternatives": ["767", "199"],
+        "message": "Tell them: Emergency childbirth in progress, need ambulance"
+      },
+      "steps": [
+        {
+          "phase": "immediate_preparation",
+          "title": "CALL FOR HELP & PREPARE (Next 2 minutes)",
+          "priority": "critical",
+          "actions": [
+            {
+              "step": 1,
+              "instruction": "Call emergency services (112 or 767) immediately",
+              "detail": "Tell them baby is coming and your exact location"
+            },
+            {
+              "step": 2,
+              "instruction": "Wash your hands thoroughly",
+              "detail": "Use soap and water for at least 30 seconds. If no water available, use hand sanitizer or cleanest available cloth"
+            },
+            {
+              "step": 3,
+              "instruction": "Position the mother",
+              "detail": "Lay her on her back with knees bent and legs spread. Support her back with pillows or folded clothes"
+            },
+            {
+              "step": 4,
+              "instruction": "Gather emergency supplies (if time permits)",
+              "detail": "Clean towels (3-4), string or shoelace (to tie cord), scissors or sharp knife (boil if possible), blanket for baby"
+            }
+          ],
+          "warnings": [
+            "Do NOT try to delay or stop labor",
+            "Do NOT give food or water during active labor"
+          ]
+        },
+        {
+          "phase": "active_delivery",
+          "title": "DURING DELIVERY (Next 5-20 minutes)",
+          "priority": "critical",
+          "actions": [
+            {
+              "step": 5,
+              "instruction": "Let the mother push naturally",
+              "detail": "Encourage her to push during contractions. Do NOT pull on the baby or tell her to stop pushing"
+            },
+            {
+              "step": 6,
+              "instruction": "Support the baby's head as it emerges",
+              "detail": "Place your hand gently under the head. DO NOT pull. Just guide and support as baby comes out naturally"
+            },
+            {
+              "step": 7,
+              "instruction": "Check for umbilical cord around neck",
+              "detail": "Once head is out, quickly feel for cord around neck. If present, gently slip it over baby's head. If too tight, leave it and deliver baby quickly"
+            },
+            {
+              "step": 8,
+              "instruction": "Support the baby's body as it delivers",
+              "detail": "Baby will be very slippery. Hold firmly but gently with both hands. Body usually comes out quickly after head"
+            }
+          ],
+          "warnings": [
+            "NEVER pull on baby or umbilical cord",
+            "NEVER try to speed up delivery by pushing on mother's belly",
+            "If only baby's head is out after 3 minutes and body won't come, have mother get on hands and knees"
+          ]
+        },
+        {
+          "phase": "immediate_newborn_care",
+          "title": "FIRST 60 SECONDS AFTER BIRTH",
+          "priority": "critical",
+          "actions": [
+            {
+              "step": 9,
+              "instruction": "Clear baby's airway",
+              "detail": "Use clean cloth to gently wipe mucus from nose and mouth. Tilt head slightly back"
+            },
+            {
+              "step": 10,
+              "instruction": "Dry baby vigorously",
+              "detail": "Use dry towel to rub baby's back and body firmly. This stimulates breathing"
+            },
+            {
+              "step": 11,
+              "instruction": "Check if baby is breathing/crying",
+              "detail": "Crying is GOOD - it means baby is breathing well. Pink or red color is normal. Blue or gray needs immediate action"
+            },
+            {
+              "step": 12,
+              "instruction": "If baby NOT breathing after 30 seconds",
+              "detail": "Flick feet gently, rub back firmly. If still not breathing after 10 more seconds, begin infant CPR (5 gentle puffs of air into nose/mouth, then call for advanced help)"
+            }
+          ],
+          "good_signs": [
+            "Baby crying or making sounds",
+            "Moving arms and legs",
+            "Pink/red skin color",
+            "Breathing regularly"
+          ],
+          "bad_signs": [
+            "Not breathing after 30 seconds",
+            "Blue or gray color",
+            "Completely limp",
+            "No movement"
+          ]
+        },
+        {
+          "phase": "cord_care",
+          "title": "UMBILICAL CORD CARE (After 1-3 minutes)",
+          "priority": "important",
+          "actions": [
+            {
+              "step": 13,
+              "instruction": "Keep baby warm on mother's chest",
+              "detail": "Place baby skin-to-skin on mother's bare chest. Cover both with blanket. This keeps baby warm and helps with bonding"
+            },
+            {
+              "step": 14,
+              "instruction": "Wait 1-3 minutes before cutting cord",
+              "detail": "Cord will stop pulsing and turn white. This gives baby important blood. No rush to cut unless emergency transport needed"
+            },
+            {
+              "step": 15,
+              "instruction": "Tie and cut cord (if professional help delayed)",
+              "detail": "Tie clean string/shoelace VERY TIGHTLY 10cm from baby's belly. Tie second string 5cm away from first. Cut BETWEEN the two ties with sterilized scissors. If no sterile scissors, WAIT for help - don't cut with dirty blade"
+            }
+          ],
+          "warnings": [
+            "NEVER cut cord with dirty scissors or blade (risk of infection)",
+            "NEVER pull on cord",
+            "If cord is bleeding after cutting, tie another string closer to baby"
+          ]
+        },
+        {
+          "phase": "afterbirth",
+          "title": "PLACENTA DELIVERY (5-30 minutes after baby)",
+          "priority": "important",
+          "actions": [
+            {
+              "step": 16,
+              "instruction": "Wait for placenta to deliver naturally",
+              "detail": "Mother will feel contractions again. Placenta will slide out. This is normal and can take 5-30 minutes"
+            },
+            {
+              "step": 17,
+              "instruction": "Do NOT pull on umbilical cord",
+              "detail": "Let placenta come out on its own. Pulling can cause severe bleeding"
+            },
+            {
+              "step": 18,
+              "instruction": "Save the placenta",
+              "detail": "Place in clean container or plastic bag. Doctor needs to examine it to ensure it came out completely"
+            },
+            {
+              "step": 19,
+              "instruction": "Watch for heavy bleeding",
+              "detail": "Some bleeding is normal. Heavy bleeding (soaking multiple cloths in minutes) is EMERGENCY. See postpartum hemorrhage protocol"
+            }
+          ]
+        },
+        {
+          "phase": "post_delivery",
+          "title": "AFTER DELIVERY CARE",
+          "priority": "important",
+          "actions": [
+            {
+              "step": 20,
+              "instruction": "Massage mother's lower belly",
+              "detail": "Firmly massage just below belly button in circular motion. This helps uterus contract and prevents bleeding. Should feel like a firm ball"
+            },
+            {
+              "step": 21,
+              "instruction": "Keep mother and baby warm",
+              "detail": "Cover both with blankets. Monitor for shivering (sign of shock)"
+            },
+            {
+              "step": 22,
+              "instruction": "Encourage breastfeeding",
+              "detail": "Put baby to breast within first hour. This helps uterus contract and reduces bleeding"
+            },
+            {
+              "step": 23,
+              "instruction": "Monitor for danger signs",
+              "detail": "Watch mother for: heavy bleeding, fever, severe pain, dizziness. Watch baby for: difficulty breathing, blue color, not feeding, excessive crying"
+            }
+          ]
+        }
+      ],
+      "danger_signs_mother": [
+        {
+          "sign": "Heavy bleeding (soaking pad/cloth every 5-10 minutes)",
+          "action": "Emergency transport immediately. Continue uterus massage. Elevate legs."
+        },
+        {
+          "sign": "Severe headache, vision changes, seizure",
+          "action": "Emergency transport. Eclampsia risk. Keep on side, protect from injury."
+        },
+        {
+          "sign": "Baby's shoulder stuck after head delivers",
+          "action": "Have mother pull knees to chest (McRoberts position). Apply firm pressure above pubic bone. Do NOT pull baby's head."
+        }
+      ],
+      "transport_guidance": "Even if delivery seems successful, both mother and baby MUST see a doctor within 6 hours. Transport as soon as safe. Bring placenta to hospital.",
+      "related_protocols": ["postpartum-hemorrhage", "infant-cpr", "maternal-shock"]
+    },
+    "severe-bleeding": {
+      "title": "Severe Bleeding Control",
+      "severity": "critical",
+      "category": "trauma",
+      "estimated_time": "Immediate action required",
+      "emergency_contact": {
+        "primary": "112",
+        "message": "Severe bleeding emergency, need ambulance now"
+      },
+      "steps": [
+        {
+          "phase": "immediate_action",
+          "title": "STOP THE BLEEDING (Next 60 seconds)",
+          "actions": [
+            {
+              "step": 1,
+              "instruction": "Call 112 immediately",
+              "detail": "Someone else calls while you stop bleeding"
+            },
+            {
+              "step": 2,
+              "instruction": "Lay person down",
+              "detail": "Helps prevent shock and fainting"
+            },
+            {
+              "step": 3,
+              "instruction": "Find the bleeding source",
+              "detail": "Remove clothing if needed to see wound clearly"
+            },
+            {
+              "step": 4,
+              "instruction": "Apply DIRECT PRESSURE with both hands",
+              "detail": "Use cleanest cloth available. Press HARD directly on wound. Don't lift to check - keep pressing for at least 10 minutes"
+            }
+          ]
+        },
+        {
+          "phase": "sustained_control",
+          "title": "MAINTAIN PRESSURE (Next 10+ minutes)",
+          "actions": [
+            {
+              "step": 5,
+              "instruction": "Keep pressing even if tiring",
+              "detail": "If blood soaks through, add MORE cloth on top. Don't remove first cloth"
+            },
+            {
+              "step": 6,
+              "instruction": "Elevate wounded area above heart (if possible)",
+              "detail": "Helps reduce blood flow to area"
+            },
+            {
+              "step": 7,
+              "instruction": "Keep person warm",
+              "detail": "Cover with blanket. Blood loss causes cold/shivering"
+            },
+            {
+              "step": 8,
+              "instruction": "Talk to person, keep them awake",
+              "detail": "Losing consciousness is danger sign"
+            }
+          ],
+          "warnings": [
+            "DO NOT use tourniquet unless limb is partially severed or pressure fails after 10 minutes",
+            "DO NOT give food or water",
+            "DO NOT remove objects stuck in wound (knife, glass, etc)"
+          ]
+        }
+      ],
+      "danger_signs": [
+        "Skin turns pale, cold, sweaty",
+        "Breathing becomes very fast or slow",
+        "Person becomes confused or unresponsive",
+        "Bleeding doesn't slow after 10 minutes of pressure"
+      ],
+      "transport_guidance": "Continue pressure during transport. If wound is on limb, keep elevated. Bring any severed body parts in clean bag on ice (not direct contact with ice)."
+    },
+    "not-breathing": {
+      "title": "Not Breathing / CPR",
+      "severity": "critical",
+      "category": "respiratory",
+      "estimated_time": "Start immediately",
+      "emergency_contact": {
+        "primary": "112",
+        "message": "Person not breathing, need help now"
+      },
+      "steps": [
+        {
+          "phase": "immediate_assessment",
+          "title": "CHECK AND CALL (First 10 seconds)",
+          "actions": [
+            {
+              "step": 1,
+              "instruction": "Check if person responds",
+              "detail": "Tap shoulders and shout 'Are you okay?'"
+            },
+            {
+              "step": 2,
+              "instruction": "Someone call 112 immediately",
+              "detail": "While you start CPR"
+            },
+            {
+              "step": 3,
+              "instruction": "Lay person flat on firm surface",
+              "detail": "Back on ground, face up"
+            }
+          ]
+        },
+        {
+          "phase": "cpr_adult",
+          "title": "ADULT CPR (Repeat until help arrives)",
+          "actions": [
+            {
+              "step": 4,
+              "instruction": "Hand position: Center of chest",
+              "detail": "Place heel of one hand on center of chest between nipples. Put other hand on top. Lock elbows straight"
+            },
+            {
+              "step": 5,
+              "instruction": "Push HARD and FAST - 30 compressions",
+              "detail": "Push down at least 5cm (2 inches). Speed: 100-120 per minute (like beat of 'Stayin Alive' song). Let chest come all the way up between pushes"
+            },
+            {
+              "step": 6,
+              "instruction": "Give 2 rescue breaths",
+              "detail": "Tilt head back, lift chin. Pinch nose shut. Cover their mouth with yours. Blow for 1 second, watch chest rise. Repeat."
+            },
+            {
+              "step": 7,
+              "instruction": "Repeat: 30 compressions, 2 breaths",
+              "detail": "Continue until person breathes, help arrives, or you're too exhausted to continue"
+            }
+          ],
+          "warnings": [
+            "If you don't know how to do rescue breaths, do compressions only - still helps!",
+            "Don't stop compressions for more than 10 seconds",
+            "Don't be afraid of breaking ribs - saving life is priority"
+          ]
+        }
+      ]
+    },
+    "snake-bite": {
+      "title": "Snake Bite Treatment",
+      "severity": "critical",
+      "category": "envenomation",
+      "estimated_time": "Act within 30 minutes",
+      "emergency_contact": {
+        "primary": "112",
+        "message": "Snake bite, need antivenom hospital location"
+      },
+      "steps": [
+        {
+          "phase": "immediate_action",
+          "title": "FIRST ACTIONS (First 5 minutes)",
+          "actions": [
+            {
+              "step": 1,
+              "instruction": "Get person away from snake",
+              "detail": "Move at least 5 meters away to prevent second bite"
+            },
+            {
+              "step": 2,
+              "instruction": "Keep person calm and still",
+              "detail": "Movement spreads venom faster. Lay down if possible"
+            },
+            {
+              "step": 3,
+              "instruction": "Remove jewelry/tight items from bitten limb",
+              "detail": "Swelling will happen - remove rings, watches, bracelets NOW"
+            },
+            {
+              "step": 4,
+              "instruction": "Immobilize bitten limb",
+              "detail": "Use stick or cardboard to splint like broken bone. Keep below heart level"
+            },
+            {
+              "step": 5,
+              "instruction": "Call 112 or go to nearest hospital with antivenom",
+              "detail": "Ask caller to find hospital with snake antivenom. Time is critical"
+            }
+          ],
+          "warnings": [
+            "DO NOT cut the bite wound",
+            "DO NOT try to suck out venom",
+            "DO NOT apply ice",
+            "DO NOT use tourniquet (cuts off blood completely)",
+            "DO NOT give alcohol or caffeine",
+            "DO NOT try to catch or kill the snake"
+          ]
+        },
+        {
+          "phase": "snake_identification",
+          "title": "IDENTIFY SNAKE (If safe to do so)",
+          "actions": [
+            {
+              "step": 6,
+              "instruction": "Note snake appearance",
+              "detail": "Color, pattern, size, shape of head. Take photo from safe distance if possible. This helps hospital give right antivenom"
+            }
+          ],
+          "common_venomous_nigeria": [
+            "Carpet Viper (rough scales, V-mark on head) - most dangerous",
+            "Black-necked Spitting Cobra (black throat band)",
+            "Puff Adder (thick body, V-pattern)",
+            "Green Mamba (bright green, tree snake)"
+          ]
+        }
+      ],
+      "danger_signs": [
+        "Severe swelling spreading up limb",
+        "Difficulty breathing",
+        "Drooping eyelids or blurred vision",
+        "Difficulty speaking or swallowing",
+        "Bleeding from gums or old wounds",
+        "Vomiting"
+      ],
+      "transport_guidance": "Get to hospital with antivenom within 2 hours if possible. Keep bitten limb immobilized and below heart during transport. Note time of bite."
+    },
+    "severe-burn": {
+      "title": "Severe Burn Treatment",
+      "severity": "critical",
+      "category": "trauma",
+      "steps": [
+        {
+          "phase": "immediate_action",
+          "title": "STOP THE BURNING (First 30 seconds)",
+          "actions": [
+            {
+              "step": 1,
+              "instruction": "Remove person from heat source",
+              "detail": "Fire, hot water, chemicals, etc. Ensure your own safety first"
+            },
+            {
+              "step": 2,
+              "instruction": "Stop, Drop, and Roll if clothes on fire",
+              "detail": "Smother flames with blanket or roll on ground"
+            },
+            {
+              "step": 3,
+              "instruction": "Remove clothing/jewelry from burned area",
+              "detail": "Unless stuck to skin. Remove quickly before swelling starts"
+            }
+          ]
+        },
+        {
+          "phase": "cooling",
+          "title": "COOL THE BURN (Next 10-20 minutes)",
+          "actions": [
+            {
+              "step": 4,
+              "instruction": "Cool with running water for 10-20 minutes",
+              "detail": "Use cool (not ice cold) water. This stops burning from going deeper"
+            },
+            {
+              "step": 5,
+              "instruction": "Cover burn with clean, dry cloth",
+              "detail": "Don't use fluffy materials (cotton wool). Prevents infection"
+            }
+          ],
+          "warnings": [
+            "DO NOT use ice (causes more damage)",
+            "DO NOT apply butter, oil, toothpaste, or home remedies",
+            "DO NOT pop blisters",
+            "DO NOT remove clothing stuck to burn"
+          ]
+        }
+      ],
+      "when_to_seek_emergency": [
+        "Burn larger than person's palm",
+        "Burn on face, hands, feet, genitals, or major joints",
+        "Burn goes all around arm or leg",
+        "Skin looks white, black, or charred",
+        "Chemical or electrical burn",
+        "Child or elderly person burned"
+      ]
+    }
+  },
+  "symptom_index": {
+    "fever": ["malaria", "infection", "heat-exhaustion"],
+    "headache": ["malaria", "dehydration", "head-injury"],
+    "vomiting": ["food-poisoning", "dehydration", "pregnancy"],
+    "diarrhea": ["cholera", "food-poisoning", "dehydration"],
+    "stomach-pain": ["appendicitis", "food-poisoning", "gastritis"],
+    "cough": ["pneumonia", "tuberculosis", "bronchitis"],
+    "rash": ["measles", "chickenpox", "allergic-reaction"]
+  }
+}
