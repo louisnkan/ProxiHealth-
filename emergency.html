@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Critical emergency medical guidance - Call 112 and get immediate AI-powered first aid instructions">
+    <title>Critical Emergency - ProxiHealth</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/emergency.css">
+</head>
+<body class="emergency-body">
+    <!-- Emergency Alert Banner -->
+    <div class="emergency-banner">
+        <div class="container">
+            <div class="banner-content">
+                <div class="pulse-indicator"></div>
+                <span>CRITICAL EMERGENCY MODE ACTIVE</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Emergency Screen -->
+    <main class="emergency-main">
+        <div class="container">
+            <!-- Step 1: Immediate Action -->
+            <section id="emergencyStep1" class="emergency-section active">
+                <div class="emergency-card urgent">
+                    <div class="emergency-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" fill="currentColor" opacity="0.2"/>
+                            <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    
+                    <h1>🚨 CRITICAL EMERGENCY DETECTED</h1>
+                    
+                    <div class="emergency-action-box">
+                        <h2>CALL FOR HELP IMMEDIATELY</h2>
+                        <div class="emergency-numbers">
+                            <a href="tel:112" class="call-btn primary">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" fill="currentColor"/>
+                                </svg>
+                                <span>
+                                    <strong>CALL 112</strong>
+                                    <small>Nigeria Emergency Services</small>
+                                </span>
+                            </a>
+                            
+                            <div class="alternative-numbers">
+                                <p>Alternative numbers:</p>
+                                <a href="tel:767" class="call-btn secondary">767 (Lagos)</a>
+                                <a href="tel:199" class="call-btn secondary">199 (Police)</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="emergency-options">
+                        <p class="options-label">What happens next?</p>
+                        
+                        <button class="option-btn success" id="helpComingBtn">
+                            <div class="option-icon">✓</div>
+                            <div class="option-content">
+                                <strong>Help is on the way</strong>
+                                <span>Show me what to do while waiting</span>
+                            </div>
+                        </button>
+
+                        <button class="option-btn warning" id="cantReachHelpBtn">
+                            <div class="option-icon">⚠️</div>
+                            <div class="option-content">
+                                <strong>Can't reach emergency services</strong>
+                                <span>Get AI-powered first aid guidance now</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 2: Emergency Type Selection -->
+            <section id="emergencyStep2" class="emergency-section">
+                <div class="back-btn" onclick="goBack()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M12 4L6 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Back
+                </div>
+
+                <div class="emergency-card">
+                    <h2>What is the emergency?</h2>
+                    <p class="section-subtitle">Select the condition that best describes the situation</p>
+
+                    <div class="emergency-type-grid">
+                        <button class="emergency-type-card" data-emergency="severe-bleeding">
+                            <div class="type-icon">🩸</div>
+                            <h3>Severe Bleeding</h3>
+                            <p>Heavy bleeding that won't stop, deep wounds</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="not-breathing">
+                            <div class="type-icon">🫁</div>
+                            <h3>Not Breathing</h3>
+                            <p>Unconscious, choking, stopped breathing</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="childbirth">
+                            <div class="type-icon">👶</div>
+                            <h3>Emergency Childbirth</h3>
+                            <p>Baby is coming, labor complications</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="chest-pain">
+                            <div class="type-icon">💔</div>
+                            <h3>Severe Chest Pain</h3>
+                            <p>Heart attack symptoms, crushing chest pain</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="snake-bite">
+                            <div class="type-icon">🐍</div>
+                            <h3>Snake/Animal Bite</h3>
+                            <p>Venomous snake, scorpion, or animal bite</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="severe-burn">
+                            <div class="type-icon">🔥</div>
+                            <h3>Severe Burns</h3>
+                            <p>Large burns, electrical burns, chemical burns</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="seizure">
+                            <div class="type-icon">⚡</div>
+                            <h3>Seizure/Convulsion</h3>
+                            <p>Uncontrolled shaking, loss of consciousness</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="head-injury">
+                            <div class="type-icon">🤕</div>
+                            <h3>Severe Head Injury</h3>
+                            <p>Unconscious after fall, bleeding from head</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="poisoning">
+                            <div class="type-icon">☠️</div>
+                            <h3>Poisoning</h3>
+                            <p>Swallowed chemicals, pesticides, overdose</p>
+                        </button>
+
+                        <button class="emergency-type-card" data-emergency="other">
+                            <div class="type-icon">❓</div>
+                            <h3>Other Emergency</h3>
+                            <p>Describe your emergency to AI</p>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: AI Guidance (Placeholder for Phase 3) -->
+            <section id="emergencyStep3" class="emergency-section">
+                <div class="back-btn" onclick="goBack()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M12 4L6 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Back
+                </div>
+
+                <div class="emergency-card">
+                    <div class="loading-state" id="loadingState">
+                        <div class="spinner"></div>
+                        <h3>Analyzing emergency...</h3>
+                        <p>AI is preparing life-saving instructions</p>
+                    </div>
+
+                    <div class="guidance-content" id="guidanceContent" style="display: none;">
+                        <!-- AI guidance will be inserted here in Phase 3 -->
+                        <div class="protocol-header">
+                            <div class="protocol-icon">🆘</div>
+                            <h2 id="protocolTitle">Emergency Protocol</h2>
+                        </div>
+
+                        <div class="protocol-body" id="protocolBody">
+                            <!-- Dynamic content from AI or offline tree -->
+                        </div>
+
+                        <div class="protocol-actions">
+                            <button class="btn-primary" onclick="window.print()">
+                                Print Instructions
+                            </button>
+                            <button class="btn-secondary" onclick="location.href='index.html'">
+                                Back to Home
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="emergency-footer">
+        <div class="container">
+            <p>⚠️ This AI guidance is for emergencies where professional help is unavailable. Always seek professional medical care when possible.</p>
+        </div>
+    </footer>
+
+    <script src="js/emergency.js"></script>
+</body>
+</html>
