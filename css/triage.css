@@ -440,6 +440,14 @@ textarea:focus {
     background: var(--soft-cream);
     border-radius: var(--radius-lg);
     margin-bottom: var(--space-4);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.result-body * {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .result-actions {
@@ -483,4 +491,40 @@ textarea:focus {
     .result-actions {
         flex-direction: column;
     }
+}
+
+/* CRITICAL FIX: Mobile text wrapping for ALL elements */
+.triage-body,
+.triage-body *,
+.triage-card,
+.triage-card *,
+.result-body,
+.result-body *,
+.assessment-result,
+.assessment-result *,
+.loading-state,
+.loading-state * {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+    max-width: 100% !important;
+}
+
+/* Ensure text never overflows */
+h1, h2, h3, h4, h5, h6, p, li, div, span, a, button {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+}
+
+/* Prevent horizontal scroll */
+body.triage-body {
+    overflow-x: hidden;
+}
+
+.triage-main {
+    overflow-x: hidden;
+}
+
+.triage-card {
+    overflow-x: hidden;
 }
