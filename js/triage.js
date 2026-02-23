@@ -366,81 +366,183 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Generate recommendations
-        assessment.recommendations = generateRecommendations(symptoms, data.severity, data.duration);
+        // Cough checks
+        if (symptoms.includes('cough')) {
+            if (data.duration === 'week+' || data.duration === '3-7days') {
+                assessment.possibleConditions.push({
+                    name: 'Persistent cough - possible TUBERCULOSIS or chronic respiratory infection',
+                    urgent: true,
+                    type: 'african_disease'
+                });
+                assessment.urgencyLevel = 'high';
+                assessment.warnings.push('⚠️ Cough lasting 2+ weeks requires TB screening.');
+            }
+        }
+        
+        // Severe pain check (sickle cell)
+        if (symptoms.includes('severe-pain') || symptoms.includes('joint-pain')) {
+            assessment.possibleConditions.push({
+                name: 'Severe pain - possible SICKLE CELL CRISIS (if known carrier)',
+                urgent: true,
+                type: 'african_disease'
+            });
+            assessment.urgencyLevel = 'high';
+        }
+        
+        // Generate Africa-specific recommendations
+        assessment.recommendations = generateAfricanRecommendations(symptoms, data.severity, data.duration, assessment.possibleConditions);
         
         return assessment;
     }
     
-    function generateRecommendations(symptoms, severity, duration) {
+    function generateAfricanRecommendations(symptoms, severity, duration, conditions) {
         const recs = [];
         
-        // Fever recommendations
+        // Malaria-specific recommendations
+        const hasMalariaSymptoms = symptoms.includes('fever') && (symptoms.includes('headache') || symptoms.includes('body-ache'));
+        if (hasMalariaSymptoms || conditions.some(c => c.name.includes('MALARIA'))) {
+            recs.push({
+                title: '🦟 Possible Malaria - Immediate Actions',
+                priority: 'high',
+                actions: [
+                    'Get malaria rapid diagnostic test (RDT) at nearest pharmacy or clinic TODAY',
+                    'If test is positive: Start artemisinin-based combination therapy (ACT) immediately',
+                    'Common ACTs in Nigeria: Coartem, Lonart, P-Alaxin (follow package instructions)',
+                    'Do NOT use chloroquine alone (resistance is high)',
+                    'Sleep under insecticide-treated mosquito net'
+                ]
+            });
+            
+            recs.push({
+                title: '🚨 Danger Signs - Go to Hospital IMMEDIATELY If:',
+                priority: 'critical',
+                actions: [
+                    'Confusion, difficulty waking up, or seizures (cerebral malaria)',
+                    'Difficulty breathing or very fast breathing',
+                    'Severe weakness - cannot stand or walk',
+                    'Yellow eyes (jaundice)',
+                    'Very dark urine (cola-colored)',
+                    'Repeated vomiting - cannot keep down medicine or fluids'
+                ]
+            });
+        }
+        
+        // Typhoid recommendations
+        if (conditions.some(c => c.name.includes('TYPHOID'))) {
+            recs.push({
+                title: '🦠 Possible Typhoid - Care Steps',
+                priority: 'high',
+                actions: [
+                    'Visit clinic for Widal test or blood culture (confirms typhoid)',
+                    'If confirmed: Take full course of antibiotics (ciprofloxacin or ceftriaxone)',
+                    'NEVER stop antibiotics early - even if feeling better',
+                    'Drink only boiled or bottled water',
+                    'Eat soft, easily digestible foods (rice, banana, toast)',
+                    'Avoid spicy or fatty foods'
+                ]
+            });
+        }
+        
+        // Cholera/severe diarrhea recommendations
+        if (symptoms.includes('diarrhea') || conditions.some(c => c.name.includes('CHOLERA'))) {
+            recs.push({
+                title: '💧 Dehydration Prevention (CRITICAL)',
+                priority: 'high',
+                actions: [
+                    'Make oral rehydration solution (ORS): Mix 6 teaspoons sugar + 1/2 teaspoon salt in 1 liter clean water',
+                    'Drink small amounts every 5-10 minutes (don\'t gulp)',
+                    'If vomiting: Wait 10 minutes, then try again with smaller sips',
+                    'Eat: Banana, rice, toast, boiled potato (BRAT diet)',
+                    'AVOID: Dairy, spicy foods, alcohol, caffeine'
+                ]
+            });
+            
+            if (severity >= 7) {
+                recs.push({
+                    title: '🚨 Severe Dehydration - Hospital URGENT',
+                    priority: 'critical',
+                    actions: [
+                        'Watery diarrhea more than 10 times in 24 hours',
+                        'No urine for 8+ hours (or very dark urine)',
+                        'Dry mouth and tongue, sunken eyes',
+                        'Extreme weakness, dizziness when standing',
+                        'In children: Sunken fontanelle (soft spot on head), no tears when crying'
+                    ]
+                });
+            }
+        }
+        
+        // TB screening recommendations
+        if (symptoms.includes('cough') && (duration === 'week+' || duration === '3-7days')) {
+            recs.push({
+                title: '🫁 Tuberculosis Screening Needed',
+                priority: 'high',
+                actions: [
+                    'Visit TB DOTS center for free sputum test (find nearest at any government hospital)',
+                    'Cough lasting 2+ weeks is TB until proven otherwise',
+                    'Wear mask around others until tested',
+                    'TB is CURABLE - treatment is FREE at government facilities',
+                    'If diagnosed: MUST complete full 6-month treatment course'
+                ]
+            });
+        }
+        
+        // Sickle cell crisis management
+        if (symptoms.includes('joint-pain') || conditions.some(c => c.name.includes('SICKLE CELL'))) {
+            recs.push({
+                title: '🩸 Sickle Cell Crisis Management',
+                priority: 'high',
+                actions: [
+                    'Drink LOTS of water (3+ liters per day)',
+                    'Take strong pain medicine: Ibuprofen 400-600mg every 6-8 hours',
+                    'Apply warm compress to painful areas (NOT cold)',
+                    'Rest in comfortable position',
+                    'If pain not controlled at home after 24 hours: Go to hospital for IV fluids and stronger pain relief'
+                ]
+            });
+        }
+        
+        // General fever management
         if (symptoms.includes('fever')) {
             recs.push({
-                title: 'Manage Fever',
+                title: '🌡️ Fever Management',
+                priority: 'medium',
                 actions: [
-                    'Take paracetamol (500mg-1000mg) every 6-8 hours',
-                    'Drink plenty of water (at least 2 liters per day)',
-                    'Use cool compress on forehead',
-                    'Rest in cool, well-ventilated room'
-                ]
-            });
-            recs.push({
-                title: 'When to Seek Help',
-                actions: [
-                    'Fever above 39°C (102°F) for more than 3 days',
-                    'Fever with severe headache and neck stiffness',
-                    'Fever with difficulty breathing',
-                    'Fever with confusion or seizures'
+                    'Take paracetamol 500-1000mg every 6-8 hours (adults)',
+                    'For children: Use paracetamol syrup (dose by weight - check bottle)',
+                    'Sponge with lukewarm water (NOT cold water or alcohol)',
+                    'Drink 2-3 liters of water daily',
+                    'Rest in cool, well-ventilated room',
+                    'Remove excess clothing/blankets'
                 ]
             });
         }
         
-        // Stomach issues
-        if (symptoms.includes('stomach-pain') || symptoms.includes('diarrhea') || symptoms.includes('nausea')) {
-            recs.push({
-                title: 'Manage Digestive Symptoms',
-                actions: [
-                    'Drink oral rehydration solution (ORS) or clean water',
-                    'Eat bland foods: rice, banana, toast',
-                    'Avoid dairy, spicy, or fatty foods',
-                    'Rest and avoid strenuous activity'
-                ]
-            });
-            recs.push({
-                title: 'Danger Signs - Seek Help If:',
-                actions: [
-                    'Blood in stool or vomit',
-                    'Severe dehydration (dry mouth, no urine for 8+ hours)',
-                    'Severe abdominal pain that worsens',
-                    'Symptoms lasting more than 3 days'
-                ]
-            });
-        }
-        
-        // General hydration
+        // Universal hydration advice
         if (symptoms.includes('fever') || symptoms.includes('diarrhea') || symptoms.includes('vomiting')) {
             recs.push({
-                title: 'Stay Hydrated',
+                title: '💧 Stay Hydrated',
+                priority: 'medium',
                 actions: [
-                    'Drink small amounts frequently (every 15-30 minutes)',
-                    'ORS is best, or water with pinch of salt and sugar',
-                    'Avoid alcohol and caffeine',
-                    'Monitor urine color (should be light yellow)'
+                    'Drink at least 2-3 liters of clean water daily',
+                    'Best fluids: ORS, coconut water, clean water, diluted fruit juice',
+                    'AVOID: Alcohol, caffeinated drinks, very sugary sodas',
+                    'Check hydration: Urine should be light yellow (dark = dehydrated)'
                 ]
             });
         }
         
-        // If high severity or long duration
+        // When to seek help
         if (severity >= 7 || duration === 'week+') {
             recs.push({
-                title: '🚨 Medical Attention Recommended',
+                title: '🏥 Medical Attention Required',
+                priority: 'critical',
                 actions: [
-                    'Your symptoms are severe or prolonged',
-                    'Visit a clinic or hospital for proper diagnosis',
-                    'Bring list of symptoms and medications taken',
-                    'Call 112 if symptoms worsen suddenly'
+                    'Your symptoms are severe or persistent',
+                    'Visit clinic or hospital for proper diagnosis',
+                    'Bring this assessment to show doctor',
+                    'Call 112 if symptoms worsen suddenly',
+                    'Do not delay - early treatment prevents complications'
                 ]
             });
         }
