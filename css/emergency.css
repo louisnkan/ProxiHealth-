@@ -1,37 +1,38 @@
 /* Emergency Page Specific Styles */
 
 .emergency-body {
-    background: linear-gradient(180deg, #FFE5E5 0%, #FFF 50%);
+    background: linear-gradient(180deg, #F8F6F3 0%, #FFF 50%);
     min-height: 100vh;
 }
 
+/* REDESIGNED: Calm Emergency Banner (Green, Not Red Panic) */
 .emergency-banner {
-    background: linear-gradient(135deg, #FF6B6B, #ff8787);
+    background: linear-gradient(135deg, #3D7F5F, #2D5F3F);
     color: white;
-    padding: var(--space-2) 0;
+    padding: 12px 0;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
 }
 
 .banner-content {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-2);
-    font-weight: 700;
-    font-size: 0.9375rem;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .pulse-indicator {
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
     background: white;
     border-radius: 50%;
-    animation: pulse 1.5s ease-in-out infinite;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .emergency-main {
@@ -350,6 +351,14 @@
     background: var(--soft-cream);
     border-radius: var(--radius-lg);
     margin-bottom: var(--space-4);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.protocol-body * {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .protocol-actions {
