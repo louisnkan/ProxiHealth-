@@ -177,8 +177,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // STEP 3: AI Assessment (Placeholder for Phase 3)
     // ============================================
     
-    // Phase 3: Real symptom assessment using offline medical data
+    // Phase 3.5: Real symptom assessment with security and African disease focus
     async function simulateAssessment() {
+        // Check rate limit
+        const rateLimitCheck = window.ProxiHealthSecurity.checkRateLimit('assessment');
+        if (!rateLimitCheck.allowed) {
+            showRateLimitError(rateLimitCheck.message);
+            return;
+        }
         const loadingState = document.getElementById('assessmentLoading');
         const resultDiv = document.getElementById('assessmentResult');
         const resultBody = document.getElementById('resultBody');
@@ -207,10 +213,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function analyzeSymptoms(symptoms, data, medicalData) {
-        // Simple symptom matching algorithm (Phase 3 offline version)
-        // In Phase 3.5, this will be enhanced with Gemini AI
+    function showRateLimitError(message) {
+        const loadingState = document.getElementById('assessmentLoading');
+        const resultDiv = document.getElementById('assessmentResult');
+        const resultBody = document.getElementById('resultBody');
         
+        loadingState.style.display = 'none';
+        resultDiv.style.display = 'block';
+        
+        resultBody.innerHTML = `
+            <div style="background: #FEF3C7; padding: var(--space-4); border-radius: var(--radius-lg); border: 2px solid #F59E0B; text-align: center;">
+                <h3 style="color: #d97706; margin-bottom: var(--space-2); font-size: 1.25rem;">Rate Limit Reached</h3>
+                <p style="color: #4A5568; margin-bottom: var(--space-3); font-size: 1rem;">
+                    ${message}
+                </p>
+                <p style="color: #4A5568; font-size: 0.875rem;">
+                    For urgent symptoms, please visit your nearest clinic or call emergency services.
+                </p>
+            </div>
+        `;
+    }
+    
+    function analyzeSymptoms(symptoms, data, medicalData) {
         const assessment = {
             symptoms: symptoms,
             duration: data.duration,
@@ -221,45 +245,124 @@ document.addEventListener('DOMContentLoaded', function() {
             warnings: []
         };
         
-        // Determine urgency based on severity and symptom combinations
+        // Enhanced African disease detection
+        const africanDiseaseCombos = [
+            {
+                combo: ['fever', 'headache', 'body-ache'],
+                patterns: {
+                    cyclical_fever: { condition: 'Possible MALARIA - cyclical fever pattern', urgent: true, priority: 'high' },
+                    persistent: { condition: 'Possible TYPHOID FEVER - prolonged symptoms', urgent: true, priority: 'high' },
+                    general: { condition: 'Viral infection or malaria', urgent: true, priority: 'medium' }
+                }
+            },
+            {
+                combo: ['fever', 'headache', 'nausea'],
+                condition: 'Possible MALARIA or MENINGITIS - monitor closely',
+                urgent: true,
+                redFlags: ['neck stiffness', 'confusion', 'sensitivity to light']
+            },
+            {
+                combo: ['diarrhea', 'vomiting', 'stomach-pain'],
+                severity_check: {
+                    severe: { condition: 'Possible CHOLERA - severe dehydration risk', urgent: true },
+                    moderate: { condition: 'Gastroenteritis - monitor hydration', urgent: false }
+                }
+            },
+            {
+                combo: ['fever', 'cough', 'fatigue'],
+                duration_check: {
+                    'week+': { condition: 'Possible TUBERCULOSIS - persistent cough', urgent: true },
+                    short: { condition: 'Respiratory infection', urgent: false }
+                }
+            },
+            {
+                combo: ['stomach-pain', 'fever'],
+                condition: 'Possible TYPHOID or APPENDICITIS',
+                urgent: true
+            },
+            {
+                combo: ['severe-pain', 'joint-pain'],
+                condition: 'Possible SICKLE CELL CRISIS (if known sickle cell)',
+                urgent: true
+            }
+        ];
+        
+        // Determine urgency
         if (data.severity >= 8) {
             assessment.urgencyLevel = 'high';
-            assessment.warnings.push('Severe symptoms detected. Consider seeking medical attention today.');
+            assessment.warnings.push('Severe symptoms detected. Seek medical attention today.');
         } else if (data.severity >= 5) {
             assessment.urgencyLevel = 'moderate';
         } else {
             assessment.urgencyLevel = 'low';
         }
         
-        // Check for concerning symptom combinations
-        const concerningCombos = [
-            { combo: ['fever', 'headache', 'body-ache'], condition: 'Possible malaria or viral infection', urgent: true },
-            { combo: ['fever', 'cough', 'fatigue'], condition: 'Possible respiratory infection', urgent: false },
-            { combo: ['stomach-pain', 'vomiting', 'diarrhea'], condition: 'Possible gastroenteritis (stomach infection)', urgent: false },
-            { combo: ['headache', 'dizziness', 'nausea'], condition: 'Possible dehydration or migraine', urgent: false },
-            { combo: ['rash', 'fever'], condition: 'Possible viral infection or allergic reaction', urgent: true }
-        ];
-        
-        concerningCombos.forEach(item => {
+        // Enhanced pattern matching
+        africanDiseaseCombos.forEach(item => {
             const hasAllSymptoms = item.combo.every(s => symptoms.includes(s));
+            
             if (hasAllSymptoms) {
-                assessment.possibleConditions.push({
-                    name: item.condition,
-                    urgent: item.urgent
-                });
-                if (item.urgent) {
+                if (item.patterns) {
+                    // Malaria detection
+                    if (data.duration === '3-7days' || data.duration === 'week+') {
+                        assessment.possibleConditions.push({
+                            name: item.patterns.persistent.condition,
+                            urgent: true,
+                            type: 'african_disease'
+                        });
+                    } else {
+                        assessment.possibleConditions.push({
+                            name: item.patterns.general.condition,
+                            urgent: true,
+                            type: 'african_disease'
+                        });
+                    }
                     assessment.urgencyLevel = 'high';
+                    
+                } else if (item.severity_check) {
+                    const condition = data.severity >= 7 ? item.severity_check.severe : item.severity_check.moderate;
+                    assessment.possibleConditions.push({
+                        name: condition.condition,
+                        urgent: condition.urgent,
+                        type: 'african_disease'
+                    });
+                    if (condition.urgent) assessment.urgencyLevel = 'high';
+                    
+                } else if (item.duration_check) {
+                    const condition = data.duration === 'week+' ? item.duration_check['week+'] : item.duration_check.short;
+                    assessment.possibleConditions.push({
+                        name: condition.condition,
+                        urgent: condition.urgent,
+                        type: condition.urgent ? 'african_disease' : 'general'
+                    });
+                    if (condition.urgent) assessment.urgencyLevel = 'high';
+                    
+                } else {
+                    assessment.possibleConditions.push({
+                        name: item.condition,
+                        urgent: item.urgent,
+                        type: 'african_disease'
+                    });
+                    if (item.urgent) assessment.urgencyLevel = 'high';
+                }
+                
+                if (item.redFlags) {
+                    assessment.warnings.push(`⚠️ Red flags: ${item.redFlags.join(', ')}. If present, seek emergency care.`);
                 }
             }
         });
         
-        // If no specific combination matched, add general guidance
-        if (assessment.possibleConditions.length === 0) {
-            if (symptoms.includes('fever')) {
-                assessment.possibleConditions.push({ name: 'Fever - possible infection', urgent: false });
-            }
-            if (symptoms.includes('headache')) {
-                assessment.possibleConditions.push({ name: 'Headache - monitor for severity', urgent: false });
+        // Single symptom checks
+        if (symptoms.includes('fever') && assessment.possibleConditions.length === 0) {
+            if (data.severity >= 7 || data.duration === 'week+') {
+                assessment.possibleConditions.push({ 
+                    name: 'Malaria or serious infection - requires medical evaluation', 
+                    urgent: true,
+                    type: 'african_disease'
+                });
+                assessment.urgencyLevel = 'high';
+            } else {
+                assessment.possibleConditions.push({ name: 'Fever - likely viral infection', urgent: false });
             }
         }
         
