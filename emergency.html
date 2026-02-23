@@ -9,13 +9,14 @@
     <link rel="stylesheet" href="css/emergency.css">
 </head>
 <body class="emergency-body">
-    <!-- Emergency Alert Banner -->
-    <div style="background: linear-gradient(135deg, #3D7F5F, #2D5F3F); padding: 12px 0; position: sticky; top: 0; z-index: 100;">
-    <div class="container">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 8px; color: white;">
-            <span style="font-size: 0.875rem; font-weight: 600; letter-spacing: 0.5px;">● EMERGENCY PROTOCOL ACTIVE</span>
+    <!-- Emergency Alert Banner (REDESIGNED: Calm, Not Panic) -->
+    <div class="emergency-banner">
+        <div class="container">
+            <div class="banner-content">
+                <div class="pulse-indicator"></div>
+                <span>EMERGENCY PROTOCOL ACTIVE</span>
+            </div>
         </div>
-    </div>
     </div>
 
     <!-- Main Emergency Screen -->
@@ -201,7 +202,6 @@
         </div>
     </footer>
 
-    <script src="js/security.js"></script>
-<script src="js/emergency.js"></script>
+    <script src="js/emergency.js"></script>
 </body>
 </html>
