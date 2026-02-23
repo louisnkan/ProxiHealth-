@@ -90,9 +90,15 @@ async function loadProtocol(emergencyType) {
     }
     
     try {
-        // Load offline medical protocols
-        const response = await fetch('data/offline-tree.json');
-        if (!response.ok) throw new Error('Failed to load protocols');
+        // FAILSAFE: Try multiple paths for offline protocols
+        let response = await fetch('data/offline-tree.json');
+        if (!response.ok) {
+            response = await fetch('../data/offline-tree.json');
+        }
+        if (!response.ok) {
+            response = await fetch('/data/offline-tree.json');
+        }
+        if (!response.ok) throw new Error('Protocols not found');
         
         const medicalData = await response.json();
         const protocol = medicalData.protocols[emergencyType];
@@ -292,4 +298,4 @@ function renderErrorGuidance() {
             </a>
         </div>
     `;
-}
+                            }
