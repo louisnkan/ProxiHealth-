@@ -552,26 +552,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function renderAssessment(assessment) {
         let html = `
-            <div style="background: var(--soft-cream); padding: var(--space-4); border-radius: var(--radius-lg); margin-bottom: var(--space-4);">
-                <h3 style="margin-bottom: var(--space-3); color: var(--charcoal);">📋 Assessment Summary</h3>
-                <div style="background: white; padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
-                    <p style="color: var(--gray-dark); margin-bottom: var(--space-1);">
-                        <strong>Symptoms:</strong> ${assessment.symptoms.map(formatSymptomName).join(', ')}
+            <div style="background: linear-gradient(135deg, #E8F4F0, #F8F6F3); padding: var(--space-4); border-radius: var(--radius-lg); margin-bottom: var(--space-4);">
+                <h3 style="margin-bottom: var(--space-3); color: #2D5F3F; font-size: 1.25rem; font-weight: 700;">📋 Assessment Summary</h3>
+                <div style="background: white; padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2); word-wrap: break-word;">
+                    <p style="color: #4A5568; margin-bottom: var(--space-2); font-size: 1rem; line-height: 1.6;">
+                        <strong style="color: #2D3748;">Symptoms:</strong><br>
+                        ${assessment.symptoms.map(formatSymptomName).join(', ')}
                     </p>
-                    <p style="color: var(--gray-dark); margin-bottom: var(--space-1);">
-                        <strong>Duration:</strong> ${formatDuration(assessment.duration)}
+                    <p style="color: #4A5568; margin-bottom: var(--space-2); font-size: 1rem;">
+                        <strong style="color: #2D3748;">Duration:</strong> ${formatDuration(assessment.duration)}
                     </p>
-                    <p style="color: var(--gray-dark);">
-                        <strong>Severity:</strong> ${assessment.severity}/10
+                    <p style="color: #4A5568; font-size: 1rem;">
+                        <strong style="color: #2D3748;">Severity:</strong> ${assessment.severity}/10
                     </p>
                 </div>
         `;
         
-        // Urgency indicator
+        // Urgency indicator with better mobile layout
         const urgencyColors = {
-            high: { bg: 'var(--coral-light)', border: 'var(--coral-red)', text: 'var(--coral-red)' },
-            moderate: { bg: 'var(--amber-light)', border: 'var(--amber-orange)', text: '#d97706' },
-            low: { bg: 'var(--mint-green)', border: 'var(--sage-green)', text: 'var(--forest-green)' }
+            high: { bg: '#FFE5E5', border: '#D84315', text: '#D84315' },
+            moderate: { bg: '#FEF3C7', border: '#F59E0B', text: '#d97706' },
+            low: { bg: '#E8F4F0', border: '#3D7F5F', text: '#2D5F3F' }
         };
         
         const urgencyLabels = {
@@ -584,49 +585,76 @@ document.addEventListener('DOMContentLoaded', function() {
         
         html += `
                 <div style="background: ${colors.bg}; padding: var(--space-3); border-radius: var(--radius-md); border-left: 4px solid ${colors.border};">
-                    <p style="font-weight: 700; color: ${colors.text}; font-size: 1.125rem;">
+                    <p style="font-weight: 700; color: ${colors.text}; font-size: 1.0625rem; line-height: 1.4; word-wrap: break-word;">
                         ${urgencyLabels[assessment.urgencyLevel]}
                     </p>
                 </div>
             </div>
         `;
         
-        // Possible conditions
+        // Possible conditions with African disease highlighting
         if (assessment.possibleConditions.length > 0) {
             html += `
-                <div style="background: white; border: 2px solid var(--gray-light); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
-                    <h3 style="margin-bottom: var(--space-3); color: var(--charcoal);">🔍 Possible Conditions</h3>
-                    ${assessment.possibleConditions.map(condition => `
-                        <div style="background: var(--soft-cream); padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2);">
-                            <p style="font-weight: 600; color: var(--charcoal);">
-                                ${condition.urgent ? '⚠️ ' : ''}${condition.name}
-                            </p>
-                        </div>
-                    `).join('')}
-                    <p style="margin-top: var(--space-3); color: var(--gray-dark); font-size: 0.875rem; font-style: italic;">
-                        Note: This is an educational assessment. Professional diagnosis is recommended.
+                <div style="background: white; border: 2px solid #E2E8F0; border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
+                    <h3 style="margin-bottom: var(--space-3); color: #2D3748; font-size: 1.25rem; font-weight: 700;">🔍 Possible Conditions</h3>
+            `;
+            
+            assessment.possibleConditions.forEach(condition => {
+                const isAfrican = condition.type === 'african_disease';
+                const bgColor = isAfrican ? '#FEF3C7' : '#F3F4F6';
+                const borderColor = isAfrican ? '#F59E0B' : '#E2E8F0';
+                
+                html += `
+                    <div style="background: ${bgColor}; padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-2); border-left: 3px solid ${borderColor}; word-wrap: break-word; overflow-wrap: break-word;">
+                        <p style="font-weight: 600; color: #2D3748; font-size: 1rem; line-height: 1.5;">
+                            ${condition.urgent ? '⚠️ ' : ''}${condition.name}
+                        </p>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    <p style="margin-top: var(--space-3); color: #718096; font-size: 0.875rem; font-style: italic; line-height: 1.5;">
+                        Note: This is an educational assessment. Professional diagnosis is recommended for confirmation.
                     </p>
                 </div>
             `;
         }
         
-        // Recommendations
+        // Recommendations with better mobile text wrapping
         if (assessment.recommendations.length > 0) {
             html += `
-                <div style="background: white; border: 2px solid var(--sage-green); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
-                    <h3 style="margin-bottom: var(--space-3); color: var(--forest-green);">💊 Care Recommendations</h3>
+                <div style="background: white; border: 2px solid #3D7F5F; border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-4);">
+                    <h3 style="margin-bottom: var(--space-3); color: #2D5F3F; font-size: 1.25rem; font-weight: 700;">💊 Care Recommendations</h3>
             `;
             
             assessment.recommendations.forEach(rec => {
-                const isDanger = rec.title.includes('Danger') || rec.title.includes('🚨');
-                const bgColor = isDanger ? 'var(--coral-light)' : 'var(--mint-green)';
-                const borderColor = isDanger ? 'var(--coral-red)' : 'var(--sage-green)';
+                const isCritical = rec.priority === 'critical' || rec.title.includes('🚨');
+                const isHigh = rec.priority === 'high';
+                let bgColor, borderColor;
+                
+                if (isCritical) {
+                    bgColor = '#FFE5E5';
+                    borderColor = '#D84315';
+                } else if (isHigh) {
+                    bgColor = '#FEF3C7';
+                    borderColor = '#F59E0B';
+                } else {
+                    bgColor = '#E8F4F0';
+                    borderColor = '#3D7F5F';
+                }
                 
                 html += `
                     <div style="background: ${bgColor}; padding: var(--space-3); border-radius: var(--radius-md); margin-bottom: var(--space-3); border-left: 4px solid ${borderColor};">
-                        <h4 style="margin-bottom: var(--space-2); color: var(--charcoal); font-size: 1.0625rem;">${rec.title}</h4>
-                        <ul style="margin: 0; padding-left: var(--space-4); color: var(--gray-dark);">
-                            ${rec.actions.map(action => `<li style="margin-bottom: var(--space-1); line-height: 1.6;">${action}</li>`).join('')}
+                        <h4 style="margin-bottom: var(--space-2); color: #2D3748; font-size: 1.0625rem; font-weight: 700; line-height: 1.4; word-wrap: break-word;">
+                            ${rec.title}
+                        </h4>
+                        <ul style="margin: 0; padding-left: var(--space-4); color: #4A5568;">
+                            ${rec.actions.map(action => `
+                                <li style="margin-bottom: var(--space-2); line-height: 1.7; font-size: 0.9375rem; word-wrap: break-word; overflow-wrap: break-word;">
+                                    ${action}
+                                </li>
+                            `).join('')}
                         </ul>
                     </div>
                 `;
@@ -635,11 +663,11 @@ document.addEventListener('DOMContentLoaded', function() {
             html += `</div>`;
         }
         
-        // Offline notice
+        // Footer notice
         html += `
-            <div style="background: var(--soft-cream); padding: var(--space-3); border-radius: var(--radius-md); text-align: center;">
-                <p style="color: var(--gray-dark); font-size: 0.875rem;">
-                    ✓ This assessment was generated using offline medical protocols
+            <div style="background: #F3F4F6; padding: var(--space-3); border-radius: var(--radius-md); text-align: center;">
+                <p style="color: #718096; font-size: 0.875rem; line-height: 1.6;">
+                    ✓ Assessment based on WHO guidelines and African disease patterns
                 </p>
             </div>
         `;
