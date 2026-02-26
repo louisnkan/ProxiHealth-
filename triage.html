@@ -1,276 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AI symptom assessment - Get medical guidance for fever, pain, and other non-urgent symptoms">
-    <title>Symptom Assessment - ProxiHealth</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/triage.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ProxiHealth Symptom Check — AI-powered triage for African diseases including malaria, typhoid, cholera and more." />
+  <meta name="theme-color" content="#2D5F3F" />
+  <title>Symptom Check — ProxiHealth</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/triage.css" />
 </head>
-<body class="triage-body">
-    <!-- Header -->
-    <header class="triage-header">
-        <div class="container">
-            <div class="nav">
-                <a href="index.html" class="back-link">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M12 4L6 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Back to Home
-                </a>
-                <div class="logo-small">
-                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-                        <rect x="14" y="6" width="4" height="20" rx="2" fill="currentColor"/>
-                        <rect x="6" y="14" width="20" height="4" rx="2" fill="currentColor"/>
-                    </svg>
-                    ProxiHealth
-                </div>
-            </div>
-        </div>
-    </header>
+<body>
 
-    <main class="triage-main">
-        <div class="container">
-            <!-- Step 1: Symptom Selection -->
-            <section id="triageStep1" class="triage-section active">
-                <div class="triage-card">
-                    <div class="progress-bar">
-                        <div class="progress-step active">1</div>
-                        <div class="progress-line"></div>
-                        <div class="progress-step">2</div>
-                        <div class="progress-line"></div>
-                        <div class="progress-step">3</div>
-                    </div>
+  <!-- Non-blocking disclaimer -->
+  <div id="disclaimer-banner">
+    <span id="disclaimer-banner__text">
+      ⚕️ This assessment is a guide, not a diagnosis. Always seek professional care when available.
+    </span>
+    <button id="disclaimer-banner__close" aria-label="Dismiss">✕</button>
+  </div>
 
-                    <h1>What symptoms are you experiencing?</h1>
-                    <p class="section-subtitle">Select all that apply. Be as specific as possible.</p>
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container nav__inner">
+      <a href="index.html" class="nav__brand" aria-label="ProxiHealth home">
+        <div class="nav__logo">🏥</div>
+        <span class="nav__title">ProxiHealth</span>
+      </a>
+      <div class="nav__links">
+        <a href="emergency.html" class="nav__link">Emergency</a>
+        <a href="triage.html" class="nav__link nav__link--active">Symptom Check</a>
+        <a href="index.html" class="nav__link">Home</a>
+      </div>
+    </div>
+  </nav>
 
-                    <div class="symptom-search">
-                        <input 
-                            type="text" 
-                            id="symptomSearchInput" 
-                            placeholder="Search symptoms (e.g., fever, cough, headache...)"
-                            autocomplete="off"
-                        >
-                    </div>
+  <!-- Page Header -->
+  <header class="triage-header page-header">
+    <div class="container">
+      <div class="page-header__label">Symptom Triage</div>
+      <h1 class="page-header__title">What's happening?</h1>
+      <p class="page-header__subtitle">
+        Answer a few questions to understand your symptoms and get specific care guidance. Works offline.
+      </p>
+    </div>
+  </header>
 
-                    <div class="symptom-categories">
-                        <h3>Common Symptoms</h3>
-                        <div class="symptom-grid">
-                            <button class="symptom-card" data-symptom="fever">
-                                <div class="symptom-icon">🌡️</div>
-                                <span>Fever</span>
-                            </button>
+  <main class="container" style="padding-top:28px; padding-bottom:52px;">
 
-                            <button class="symptom-card" data-symptom="headache">
-                                <div class="symptom-icon">🤕</div>
-                                <span>Headache</span>
-                            </button>
+    <!-- Progress bar -->
+    <div class="triage-progress" aria-label="Assessment progress">
+      <div class="triage-progress__label">
+        <span id="triage-progress-label">Start</span>
+        <span>Symptom Assessment</span>
+      </div>
+      <div class="triage-progress__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+        <div class="triage-progress__fill" id="triage-progress-fill" style="width:0%"></div>
+      </div>
+    </div>
 
-                            <button class="symptom-card" data-symptom="cough">
-                                <div class="symptom-icon">😷</div>
-                                <span>Cough</span>
-                            </button>
+    <!-- Loading (hidden immediately since triage uses inline tree) -->
+    <div id="triage-loading" style="display:none;" aria-live="polite"></div>
 
-                            <button class="symptom-card" data-symptom="stomach-pain">
-                                <div class="symptom-icon">🤢</div>
-                                <span>Stomach Pain</span>
-                            </button>
+    <!-- Fallback (won't show since inline tree always works) -->
+    <div id="triage-fallback" style="display:none;" aria-live="polite">
+      <div class="card card--green">
+        <h3 style="margin-bottom:12px; word-break:normal;">⚠️ Could not load assessment</h3>
+        <p>Use the emergency protocols for immediate guidance, or see a clinic.</p>
+        <a href="emergency.html" class="btn btn--primary mt-md">Emergency Protocols</a>
+      </div>
+    </div>
 
-                            <button class="symptom-card" data-symptom="nausea">
-                                <div class="symptom-icon">🤮</div>
-                                <span>Nausea/Vomiting</span>
-                            </button>
+    <!-- Triage question/result area -->
+    <div id="triage-container" aria-live="polite">
+      <!-- Populated by triage.js -->
+    </div>
 
-                            <button class="symptom-card" data-symptom="diarrhea">
-                                <div class="symptom-icon">💩</div>
-                                <span>Diarrhea</span>
-                            </button>
+    <!-- Bottom disclaimer (always visible) -->
+    <div style="background:rgba(248,246,243,0.78); backdrop-filter:blur(16px); border:1px solid #D8E5DA; border-radius:14px; padding:14px 16px; margin-top:28px; font-size:0.84rem; color:#3B5243; line-height:1.6;">
+      <strong>About this assessment:</strong> ProxiHealth is testing AI-powered triage to help people in areas with limited medical access understand their symptoms and make better decisions. Results are based on WHO guidelines and African disease patterns. Always seek professional care when available.
+    </div>
 
-                            <button class="symptom-card" data-symptom="body-ache">
-                                <div class="symptom-icon">💪</div>
-                                <span>Body Aches</span>
-                            </button>
+  </main>
 
-                            <button class="symptom-card" data-symptom="fatigue">
-                                <div class="symptom-icon">😴</div>
-                                <span>Fatigue/Weakness</span>
-                            </button>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__brand">ProxiHealth</div>
+      <div class="footer__links">
+        <a href="index.html">Home</a>
+        <a href="emergency.html">Emergency Protocols</a>
+      </div>
+      <p style="font-size:0.78rem; margin:0; color:rgba(255,255,255,0.3);">
+        © 2026 ProxiHealth · Not a replacement for medical care
+      </p>
+    </div>
+  </footer>
 
-                            <button class="symptom-card" data-symptom="rash">
-                                <div class="symptom-icon">🔴</div>
-                                <span>Rash/Skin Issue</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="sore-throat">
-                                <div class="symptom-icon">🗣️</div>
-                                <span>Sore Throat</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="runny-nose">
-                                <div class="symptom-icon">🤧</div>
-                                <span>Runny Nose</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="dizziness">
-                                <div class="symptom-icon">😵</div>
-                                <span>Dizziness</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="back-pain">
-                                <div class="symptom-icon">🔙</div>
-                                <span>Back Pain</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="joint-pain">
-                                <div class="symptom-icon">🦴</div>
-                                <span>Joint Pain</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="ear-pain">
-                                <div class="symptom-icon">👂</div>
-                                <span>Ear Pain</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="eye-problem">
-                                <div class="symptom-icon">👁️</div>
-                                <span>Eye Problem</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="wound">
-                                <div class="symptom-icon">🩹</div>
-                                <span>Cut/Wound</span>
-                            </button>
-
-                            <button class="symptom-card" data-symptom="insect-bite">
-                                <div class="symptom-icon">🦟</div>
-                                <span>Insect Bite</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="selected-symptoms" id="selectedSymptoms" style="display: none;">
-                        <h4>Selected Symptoms:</h4>
-                        <div class="symptom-tags" id="symptomTags"></div>
-                    </div>
-
-                    <button class="btn-primary btn-large" id="continueBtn" disabled>
-                        Continue to Details
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
-            </section>
-
-            <!-- Step 2: Symptom Details -->
-            <section id="triageStep2" class="triage-section">
-                <div class="triage-card">
-                    <div class="progress-bar">
-                        <div class="progress-step completed">✓</div>
-                        <div class="progress-line active"></div>
-                        <div class="progress-step active">2</div>
-                        <div class="progress-line"></div>
-                        <div class="progress-step">3</div>
-                    </div>
-
-                    <h2>Tell us more about your symptoms</h2>
-                    <p class="section-subtitle">This helps our AI provide accurate guidance</p>
-
-                    <div class="question-group">
-                        <label class="question-label">How long have you had these symptoms?</label>
-                        <div class="option-buttons">
-                            <button class="option-btn-small" data-duration="hours">A few hours</button>
-                            <button class="option-btn-small" data-duration="1-2days">1-2 days</button>
-                            <button class="option-btn-small" data-duration="3-7days">3-7 days</button>
-                            <button class="option-btn-small" data-duration="week+">More than a week</button>
-                        </div>
-                    </div>
-
-                    <div class="question-group">
-                        <label class="question-label">How severe are your symptoms?</label>
-                        <div class="severity-scale">
-                            <button class="severity-btn mild" data-severity="1">
-                                <span class="severity-number">1</span>
-                                <span class="severity-label">Mild</span>
-                            </button>
-                            <button class="severity-btn moderate" data-severity="5">
-                                <span class="severity-number">5</span>
-                                <span class="severity-label">Moderate</span>
-                            </button>
-                            <button class="severity-btn severe" data-severity="10">
-                                <span class="severity-number">10</span>
-                                <span class="severity-label">Severe</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="question-group">
-                        <label class="question-label">Any additional details? (Optional)</label>
-                        <textarea 
-                            id="additionalDetails" 
-                            placeholder="E.g., started after eating, worse at night, also feeling tired..."
-                            rows="4"
-                        ></textarea>
-                    </div>
-
-                    <div class="button-group">
-                        <button class="btn-secondary" onclick="goBackToStep(1)">
-                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                                <path d="M12 4L6 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            Back
-                        </button>
-                        <button class="btn-primary" id="getAssessmentBtn" disabled>
-                            Get AI Assessment
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Step 3: AI Assessment (Placeholder for Phase 3) -->
-            <section id="triageStep3" class="triage-section">
-                <div class="triage-card">
-                    <div class="loading-state" id="assessmentLoading">
-                        <div class="spinner"></div>
-                        <h3>AI is analyzing your symptoms...</h3>
-                        <p>Checking against medical protocols and guidelines</p>
-                    </div>
-
-                    <div class="assessment-result" id="assessmentResult" style="display: none;">
-                        <!-- AI assessment will be inserted here in Phase 3 -->
-                        <div class="result-header">
-                            <div class="result-icon">🤖</div>
-                            <h2>AI Assessment Complete</h2>
-                        </div>
-
-                        <div class="result-body" id="resultBody">
-                            <!-- Dynamic AI content -->
-                        </div>
-
-                        <div class="result-actions">
-                            <button class="btn-primary" onclick="window.print()">
-                                Save/Print Assessment
-                            </button>
-                            <button class="btn-secondary" onclick="location.href='index.html'">
-                                New Assessment
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="triage-footer">
-        <div class="container">
-            <p>⚠️ This AI assessment is for educational purposes. Seek professional medical care if symptoms worsen.</p>
-        </div>
-    </footer>
-
-    <script src="js/security.js"></script>
-<script src="js/triage.js"></script>
+  <script src="js/security.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/triage.js"></script>
 </body>
 </html>
