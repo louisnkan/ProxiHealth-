@@ -78,6 +78,9 @@ const ProxiEmergency = (() => {
       const card = e.target.closest('.protocol-card');
       if (card) openProtocol(card.dataset.id);
     });
+
+    // Check if URL has a hash to auto-open
+    checkHashOnLoad();
   }
 
   // ── Open protocol viewer ──────────────────────────────────
@@ -146,6 +149,15 @@ const ProxiEmergency = (() => {
 
     if (backBtn) backBtn.addEventListener('click', goBack);
     initNoHelpBtn();
+  }
+
+  // Auto-open protocol if URL has a hash (e.g. emergency.html#malaria)
+  function checkHashOnLoad() {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && protocols) {
+      const found = protocols.find(p => p.id === hash);
+      if (found) openProtocol(hash);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', init);
