@@ -3,254 +3,337 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ProxiHealth — AI-powered emergency medical guidance for Africa. Free, offline-first, mobile-first." />
-  <meta name="theme-color" content="#2D5F3F" />
+
+  <!-- =============================================
+       SEO METADATA
+       ============================================= -->
   <title>ProxiHealth — Emergency Medical Guidance for Africa</title>
+  <meta name="description" content="When the nearest hospital is hours away, ProxiHealth gives you verified step-by-step emergency guidance. Free, offline, no login. Built for Africa." />
+  <meta name="keywords" content="emergency medical Africa, first aid Nigeria, malaria symptoms, emergency protocols, offline health app, AI triage Africa, ProxiHealth, Louis Nkan" />
+  <meta name="author" content="Louis Nkan" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://louisnkan.github.io/ProxiHealth/" />
+
+  <!-- Open Graph — WhatsApp, Facebook previews -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="ProxiHealth — Emergency Medical Guidance for Africa" />
+  <meta property="og:description" content="When the nearest hospital is hours away, ProxiHealth gives you verified step-by-step emergency guidance. Free, offline, no login. Built for Africa." />
+  <meta property="og:url"         content="https://louisnkan.github.io/ProxiHealth/" />
+  <meta property="og:site_name"   content="ProxiHealth" />
+  <meta property="og:image"       content="https://louisnkan.github.io/ProxiHealth/og-image.png" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale"      content="en_NG" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="ProxiHealth — Emergency Medical Guidance for Africa" />
+  <meta name="twitter:description" content="When the nearest hospital is hours away, ProxiHealth gives you verified step-by-step emergency guidance. Free, offline, no login. Built for Africa." />
+  <meta name="twitter:image"       content="https://louisnkan.github.io/ProxiHealth/og-image.png" />
+  <meta name="twitter:creator"     content="@louisnkan" />
+
+  <!-- PWA -->
+  <meta name="theme-color" content="#2D5F3F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title"   content="ProxiHealth" />
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- JSON-LD Structured Data for Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalOrganization",
+    "name": "ProxiHealth",
+    "description": "AI-powered emergency medical guidance for Africa. Offline-first protocols for childbirth, CPR, malaria, snake bite, and more.",
+    "url": "https://louisnkan.github.io/ProxiHealth/",
+    "foundingDate": "2025",
+    "founder": { "@type": "Person", "name": "Louis Nkan" },
+    "areaServed": "Africa",
+    "availableLanguage": "English",
+    "medicalSpecialty": "Emergency Medicine"
+  }
+  </script>
+
+  <!-- =============================================
+       GOOGLE TAG PLACEHOLDER
+       Replace between the GOOGLE_TAG markers with
+       your actual Google Analytics 4 or GTM snippet
+       ============================================= -->
+  <!-- GOOGLE_TAG_START -->
+  <!-- Example GA4:
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  -->
+  <!-- GOOGLE_TAG_END -->
+
   <link rel="stylesheet" href="css/styles.css" />
+
   <style>
-    /* ── Hero ─────────────────────────────── */
+    /* NAV — single row, never wraps on mobile */
+    .nav__inner  { flex-wrap: nowrap; }
+    .nav__links  { flex-wrap: nowrap; flex-shrink: 0; }
+    .nav__link   { font-size: 0.82rem; padding: 7px 10px; white-space: nowrap; }
+
+    /* HERO */
     .hero {
-      background: linear-gradient(145deg, #1A3D28 0%, #2D5F3F 45%, #3D7A52 100%);
-      padding: 72px 0 88px;
-      color: #fff;
+      background: linear-gradient(160deg, #152E1E 0%, #1E4230 35%, #2B5A3B 70%, #3A6E4D 100%);
+      padding: 60px 0 76px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
     .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse at 25% 40%, rgba(122,232,154,0.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 75% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        radial-gradient(ellipse at 18% 55%, rgba(122,232,154,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse at 82% 18%, rgba(255,255,255,0.04) 0%, transparent 45%);
       pointer-events: none;
     }
     .hero__inner { position: relative; z-index: 1; }
+
     .hero__badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.20);
-      backdrop-filter: blur(10px);
-      padding: 7px 18px;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 22px;
-      color: #A8DDB5;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.18);
+      backdrop-filter: blur(12px);
+      padding: 6px 16px; border-radius: 999px;
+      font-size: 0.73rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: #A8DDB5; margin-bottom: 22px;
     }
     .hero__badge::before {
-      content: '';
-      width: 6px; height: 6px;
-      background: #7AE89A;
-      border-radius: 50%;
+      content: ''; width: 6px; height: 6px;
+      background: #7AE89A; border-radius: 50%;
       animation: blink 2s ease-in-out infinite;
     }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
 
-    .hero__title {
+    .hero__headline {
       font-family: 'DM Serif Display', Georgia, serif;
-      font-size: clamp(2rem, 7vw, 3.6rem);
-      color: #fff;
-      line-height: 1.1;
-      margin-bottom: 18px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      word-break: normal;
+      font-size: clamp(2.1rem, 7vw, 3.8rem);
+      color: #fff; line-height: 1.08;
+      margin-bottom: 16px; letter-spacing: -0.01em;
     }
-    .hero__title em { font-style: italic; color: #7AE89A; }
+    .hero__headline em { font-style: italic; color: #7AE89A; }
 
     .hero__sub {
-      font-size: clamp(1rem, 2.5vw, 1.15rem);
-      color: rgba(255,255,255,0.72);
-      max-width: 460px;
-      margin: 0 auto 40px;
-      line-height: 1.65;
-      word-break: normal;
-      white-space: normal;
+      font-size: clamp(0.93rem, 2.3vw, 1.08rem);
+      color: rgba(255,255,255,0.66);
+      max-width: 430px; margin: 0 auto 36px; line-height: 1.65;
     }
 
-    .hero__cta {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      max-width: 340px;
-      margin: 0 auto;
+    /* Search bar */
+    .search-wrap {
+      max-width: 520px; margin: 0 auto 14px;
+      position: relative;
     }
-    @media (min-width: 480px) {
-      .hero__cta { flex-direction: row; max-width: none; justify-content: center; }
-    }
-
-    .hero-btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #fff;
-      color: #2D5F3F;
-      border: none;
-      padding: 16px 30px;
-      border-radius: 16px;
+    .search-input {
+      width: 100%;
+      background: rgba(255,255,255,0.97);
+      border: none; border-radius: 14px;
+      padding: 16px 148px 16px 18px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-      min-height: 52px;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      white-space: nowrap;
+      font-size: 0.97rem; color: #1A2E1F;
+      box-shadow: 0 4px 28px rgba(0,0,0,0.20);
+      outline: none;
+      transition: box-shadow 0.2s;
     }
-    .hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.25); color: #2D5F3F; text-decoration: none; }
+    .search-input::placeholder { color: #9BB5A0; }
+    .search-input:focus { box-shadow: 0 4px 36px rgba(0,0,0,0.28); }
 
-    .hero-btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: transparent;
-      color: rgba(255,255,255,0.88);
-      border: 1.5px solid rgba(255,255,255,0.28);
-      padding: 16px 30px;
-      border-radius: 16px;
+    .search-btn {
+      position: absolute; right: 6px; top: 6px; bottom: 6px;
+      background: #2D5F3F; color: #fff; border: none;
+      border-radius: 10px; padding: 0 16px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      min-height: 52px;
-      transition: all 0.15s;
-      backdrop-filter: blur(8px);
-      white-space: nowrap;
+      font-size: 0.88rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+      transition: background 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .hero-btn-secondary:hover { background: rgba(255,255,255,0.10); color: #fff; text-decoration: none; }
+    .search-btn:hover { background: #3D7A52; }
 
-    /* ── Stats ─────────────────────────────── */
-    .stats-row {
-      background: rgba(253,252,250,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid #D8E5DA;
-      padding: 22px 0;
+    /* AI response bubble */
+    .search-result {
+      max-width: 520px; margin: 0 auto 4px;
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 14px; padding: 16px 20px;
+      text-align: left; color: #fff;
+      font-size: 0.91rem; line-height: 1.55;
+      display: none;
+      animation: fadeUp 0.3s ease;
     }
-    .stats-row__inner {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 32px;
+    .search-result.visible { display: block; }
+    .search-result__label {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #7AE89A; margin-bottom: 8px;
     }
-    .stat { text-align: center; }
-    .stat__num { font-family: 'DM Serif Display', serif; font-size: 1.7rem; color: #2D5F3F; display: block; line-height: 1; }
-    .stat__lbl { font-size: 0.78rem; color: #6B8C74; font-weight: 500; margin-top: 2px; display: block; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ── Features ──────────────────────────── */
-    .features { padding: 64px 0; }
-    .section-header { text-align: center; margin-bottom: 44px; }
-    .section-header__tag {
-      display: inline-block;
-      background: #EBF5EC;
-      color: #2D5F3F;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 999px;
-      margin-bottom: 12px;
+    .hero__divider {
+      font-size: 0.78rem; color: rgba(255,255,255,0.38);
+      margin: 18px 0 16px; position: relative;
     }
-    .section-header h2 { margin-bottom: 8px; }
-    .section-header p { color: #6B8C74; max-width: 440px; margin: 0 auto; word-break: normal; white-space: normal; }
+    .hero__divider::before, .hero__divider::after {
+      content: ''; position: absolute; top: 50%;
+      width: calc(50% - 70px); height: 1px;
+      background: rgba(255,255,255,0.13);
+    }
+    .hero__divider::before { left: 0; }
+    .hero__divider::after  { right: 0; }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
+    /* Emergency type cards */
+    .type-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; max-width: 520px; margin: 0 auto;
     }
-    @media (min-width: 560px) { .features-grid { grid-template-columns: 1fr 1fr; } }
-
-    .feature-card {
-      background: rgba(253,252,250,0.78);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.65);
-      border-radius: 20px;
-      padding: 26px 22px;
-      transition: box-shadow 0.2s, transform 0.2s;
-      box-shadow: 0 4px 16px rgba(45,95,63,0.08);
+    .type-card {
+      background: rgba(255,255,255,0.09);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px; padding: 16px 14px;
+      cursor: pointer; text-decoration: none;
+      display: block;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .feature-card:hover { box-shadow: 0 8px 28px rgba(45,95,63,0.13); transform: translateY(-2px); }
-    .feature-card__icon { font-size: 1.8rem; margin-bottom: 12px; display: block; }
-    .feature-card__title { font-size: 1rem; font-weight: 700; color: #1A2E1F; margin-bottom: 7px; word-break: normal; }
-    .feature-card__desc { font-size: 0.9rem; color: #6B8C74; line-height: 1.55; margin: 0; word-break: normal; white-space: normal; }
-
-    /* ── How it works ──────────────────────── */
-    .how-it-works {
-      background: linear-gradient(135deg, #1A3D28 0%, #2D5F3F 100%);
-      padding: 64px 0;
-      color: #fff;
-    }
-    .how-it-works .section-header__tag { background: rgba(255,255,255,0.12); color: #A8DDB5; }
-    .how-it-works .section-header h2 { color: #fff; }
-    .how-it-works .section-header p { color: rgba(255,255,255,0.65); max-width: 400px; }
-
-    .how-steps { display: flex; flex-direction: column; gap: 18px; max-width: 520px; margin: 0 auto; }
-    .how-step {
-      display: flex;
-      gap: 18px;
-      align-items: flex-start;
-      background: rgba(255,255,255,0.07);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 16px;
-      padding: 18px 20px;
-    }
-    .how-step__num {
-      width: 38px; height: 38px;
+    .type-card:hover {
       background: rgba(255,255,255,0.15);
-      border-radius: 50%;
+      border-color: rgba(255,255,255,0.26);
+      transform: translateY(-2px); text-decoration: none;
+    }
+    .type-icon {
+      width: 34px; height: 34px; border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 1rem; color: #fff;
-      flex-shrink: 0;
+      font-size: 1.05rem; margin-bottom: 10px;
     }
-    .how-step__content h4 { color: #fff; font-size: 1rem; margin-bottom: 4px; word-break: normal; }
-    .how-step__content p  { color: rgba(255,255,255,0.62); font-size: 0.88rem; margin: 0; word-break: normal; white-space: normal; }
+    .type-icon--red   { background: rgba(255,100,100,0.22); }
+    .type-icon--amber { background: rgba(255,180,60,0.22); }
+    .type-title { font-size: 0.88rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .type-desc  { font-size: 0.73rem; color: rgba(255,255,255,0.52); line-height: 1.4; margin: 0; }
+    .type-tag   {
+      display: inline-block; margin-top: 9px;
+      font-size: 0.68rem; font-weight: 700;
+      padding: 2px 9px; border-radius: 999px;
+    }
+    .tag-red   { background: rgba(255,100,100,0.18); color: #FF9A9A; }
+    .tag-amber { background: rgba(255,180,60,0.18);  color: #FFD080; }
 
-    /* ── Emergency CTA ─────────────────────── */
-    .emg-cta {
-      padding: 64px 0;
-      text-align: center;
+    /* TRUST STRIP */
+    .trust-strip {
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
     }
-    .emg-cta__card {
-      background: rgba(253,252,250,0.78);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+    .trust-strip__inner {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 14px 28px;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.8rem; font-weight: 600; color: var(--text-light);
+    }
+    .trust-item::before { content: '✓'; color: var(--green-mid); font-weight: 800; }
+
+    /* STATS */
+    .stats-section { padding: 48px 0; }
+    .stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    @media (min-width: 560px) { .stats-grid { grid-template-columns: repeat(4,1fr); } }
+    .stat-card {
+      background: rgba(253,252,250,0.82);
+      backdrop-filter: blur(16px);
       border: 1px solid rgba(255,255,255,0.65);
-      border-radius: 28px;
-      padding: 48px var(--space-lg);
-      max-width: 520px;
-      margin: 0 auto;
-      box-shadow: 0 8px 40px rgba(45,95,63,0.12);
+      border-radius: 18px; padding: 22px 14px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(45,95,63,0.07);
     }
-    .emg-cta__icon { font-size: 3rem; margin-bottom: 16px; display: block; }
-    .emg-cta__title { font-family: 'DM Serif Display', serif; font-size: clamp(1.5rem, 4vw, 2rem); margin-bottom: 10px; word-break: normal; }
-    .emg-cta__sub { color: #6B8C74; margin-bottom: 28px; word-break: normal; white-space: normal; }
+    .stat-num { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--green-deep); display: block; line-height: 1; }
+    .stat-ctx { font-size: 0.73rem; font-weight: 600; color: var(--text-light); margin-top: 5px; display: block; line-height: 1.4; }
+
+    /* FEATURES */
+    .features-section { padding: 64px 0; }
+    .eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green-mid); margin-bottom: 10px; }
+    .sec-title { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem,4.5vw,2.4rem); margin-bottom: 10px; line-height: 1.15; }
+    .sec-sub   { font-size: 0.97rem; color: var(--text-light); max-width: 400px; margin: 0 auto; }
+    .features-grid {
+      display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 40px;
+    }
+    @media (min-width: 540px) { .features-grid { grid-template-columns: 1fr 1fr; } }
+    .feat {
+      background: rgba(253,252,250,0.82); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: 20px; padding: 24px 20px;
+      box-shadow: 0 2px 12px rgba(45,95,63,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feat:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,95,63,0.11); }
+    .feat__icon  { font-size: 1.6rem; margin-bottom: 12px; display: block; }
+    .feat__title { font-size: 0.94rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+    .feat__body  { font-size: 0.86rem; color: var(--text-light); line-height: 1.55; margin: 0; }
+
+    /* HOW IT WORKS */
+    .hiw {
+      background: linear-gradient(160deg, #152B1D 0%, #2D5F3F 100%);
+      padding: 64px 0;
+    }
+    .hiw-steps { display: flex; flex-direction: column; gap: 12px; margin-top: 36px; }
+    .hiw-step {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px; padding: 18px;
+    }
+    .hiw-num {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: rgba(255,255,255,0.11); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 0.9rem; color: #7AE89A;
+    }
+    .hiw-title { font-size: 0.97rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .hiw-body  { font-size: 0.84rem; color: rgba(255,255,255,0.55); margin: 0; line-height: 1.5; }
+
+    /* CTA BLOCK */
+    .cta-section { padding: 64px 0; }
+    .cta-card {
+      background: rgba(253,252,250,0.84); backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.65);
+      border-radius: 28px; padding: 48px 24px;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(45,95,63,0.10);
+    }
+    .cta-card__eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--alert-red); margin-bottom: 10px; }
+    .cta-card__title   { font-family: 'DM Serif Display', serif; font-size: clamp(1.5rem,4vw,2.1rem); margin-bottom: 10px; }
+    .cta-card__sub     { color: var(--text-light); margin-bottom: 28px; font-size: 0.94rem; max-width: 360px; margin-left:auto; margin-right:auto; }
+
+    /* GEO FOOTER LINE */
+    .footer__geo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.78rem; color: rgba(255,255,255,0.32);
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Non-blocking disclaimer banner (dismisses with X, remembers via localStorage) -->
+  <!-- Non-blocking disclaimer -->
   <div id="disclaimer-banner">
     <span id="disclaimer-banner__text">
-      ⚕️ <strong>ProxiHealth is being tested as an AI-assisted emergency tool.</strong>
-      It is not a substitute for professional medical care. In life-threatening situations, call 112.
+      ⚕️ <strong>ProxiHealth is an AI-assisted tool being tested.</strong>
+      Not a substitute for professional care. Call 112 in life-threatening emergencies.
     </span>
     <button id="disclaimer-banner__close" aria-label="Dismiss">✕</button>
   </div>
 
-  <!-- Navigation -->
+  <!-- NAV — never wraps -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="container nav__inner">
       <a href="index.html" class="nav__brand" aria-label="ProxiHealth home">
@@ -259,135 +342,203 @@
       </a>
       <div class="nav__links">
         <a href="emergency.html" class="nav__link">Emergency</a>
-        <a href="triage.html" class="nav__link">Symptom Check</a>
+        <a href="triage.html"    class="nav__link">Symptom Check</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
+  <!-- HERO -->
   <section class="hero">
     <div class="container hero__inner">
+
       <div class="hero__badge">🌍 Built for Africa</div>
-      <h1 class="hero__title">
-        Emergency care,<br>
-        <em>wherever you are</em>
+
+      <h1 class="hero__headline">
+        Medical emergency?<br>
+        <em>Get guidance instantly.</em>
       </h1>
+
       <p class="hero__sub">
-        Offline-first emergency protocols and AI-powered symptom triage — designed for the 500 million Africans who can't always reach a hospital in time.
+        AI-powered protocols for the 500 million Africans who can't always reach a hospital in time.
       </p>
-      <div class="hero__cta">
-        <a href="emergency.html" class="hero-btn-primary">🆘 Emergency Protocols</a>
-        <a href="triage.html" class="hero-btn-secondary">Check Symptoms →</a>
+
+      <!-- Search bar — smart keyword routing now, Gemini in Phase 2 -->
+      <div class="search-wrap">
+        <input
+          type="text"
+          class="search-input"
+          id="hero-search"
+          placeholder="Describe emergency: snake bite, fever, bleeding, childbirth…"
+          aria-label="Describe your medical emergency"
+          autocomplete="off"
+          maxlength="200"
+        />
+        <button class="search-btn" id="hero-search-btn">Get AI Guidance →</button>
       </div>
+
+      <!-- Response bubble -->
+      <div class="search-result" id="search-result" role="alert" aria-live="polite">
+        <div class="search-result__label">⚡ AI Response</div>
+        <div id="search-result-text"></div>
+      </div>
+
+      <div class="hero__divider">or select emergency type</div>
+
+      <!-- Emergency type selector -->
+      <div class="type-grid">
+        <a href="emergency.html" class="type-card">
+          <div class="type-icon type-icon--red">🚨</div>
+          <div class="type-title">Critical Emergency</div>
+          <p class="type-desc">Bleeding · Not breathing · Childbirth · Snake bite · Burns</p>
+          <span class="type-tag tag-red">Immediate Response</span>
+        </a>
+        <a href="triage.html" class="type-card">
+          <div class="type-icon type-icon--amber">🌡️</div>
+          <div class="type-title">Non-Urgent Symptoms</div>
+          <p class="type-desc">Fever · Headache · Rash · Stomach pain · Cough</p>
+          <span class="type-tag tag-amber">AI Assessment</span>
+        </a>
+      </div>
+
     </div>
   </section>
 
-  <!-- Stats -->
-  <div class="stats-row">
-    <div class="container stats-row__inner">
-      <div class="stat">
-        <span class="stat__num">500M+</span>
-        <span class="stat__lbl">Without nearby care</span>
-      </div>
-      <div class="stat">
-        <span class="stat__num">10+</span>
-        <span class="stat__lbl">Emergency protocols</span>
-      </div>
-      <div class="stat">
-        <span class="stat__num">100%</span>
-        <span class="stat__lbl">Works offline</span>
-      </div>
-      <div class="stat">
-        <span class="stat__num">Free</span>
-        <span class="stat__lbl">Always</span>
-      </div>
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="container trust-strip__inner">
+      <span class="trust-item">100% Free</span>
+      <span class="trust-item">No Login Required</span>
+      <span class="trust-item">Works Offline</span>
+      <span class="trust-item">Private &amp; Secure</span>
+      <span class="trust-item">WHO-Based Protocols</span>
     </div>
   </div>
 
-  <!-- Features -->
-  <section class="features">
+  <!-- STATS -->
+  <section class="stats-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-header__tag">What we do</span>
-        <h2>Life-saving guidance when you need it most</h2>
-        <p>Built for real emergencies, real phones, and real African conditions.</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-num">500M+</span>
+          <span class="stat-ctx">Africans without nearby emergency care</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">10+</span>
+          <span class="stat-ctx">Emergency protocols, fully offline</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">0s</span>
+          <span class="stat-ctx">Wait time — guidance loads instantly</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num">Free</span>
+          <span class="stat-ctx">No subscription, no login, always</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section">
+    <div class="container">
+      <div style="text-align:center">
+        <div class="eyebrow">What ProxiHealth does</div>
+        <h2 class="sec-title">Life-saving guidance<br>when you need it most</h2>
+        <p class="sec-sub">Built for real emergencies, real phones, and real African conditions.</p>
       </div>
       <div class="features-grid">
-        <div class="feature-card">
-          <span class="feature-card__icon">📵</span>
-          <div class="feature-card__title">Works without internet</div>
-          <p class="feature-card__desc">All emergency protocols are stored on your device. No data connection needed during a crisis.</p>
+        <div class="feat"><span class="feat__icon">📵</span><div class="feat__title">Works without internet</div><p class="feat__body">All protocols stored on your device. No data connection needed during a crisis.</p></div>
+        <div class="feat"><span class="feat__icon">🌍</span><div class="feat__title">African disease detection</div><p class="feat__body">Malaria, typhoid, cholera, meningitis — diseases common in Africa but overlooked by Western health apps.</p></div>
+        <div class="feat"><span class="feat__icon">📱</span><div class="feat__title">Mobile-first design</div><p class="feat__body">Large text, large buttons, readable in sunlight. Built for real emergencies on real phones.</p></div>
+        <div class="feat"><span class="feat__icon">🤱</span><div class="feat__title">Critical emergency protocols</div><p class="feat__body">Childbirth, CPR, severe bleeding, snake bite, burns, choking — step-by-step guidance for deadly emergencies.</p></div>
+        <div class="feat"><span class="feat__icon">💊</span><div class="feat__title">Specific care recommendations</div><p class="feat__body">Not "monitor at home" — actual medication names, doses, and clear actions for each condition.</p></div>
+        <div class="feat"><span class="feat__icon">🤖</span><div class="feat__title">AI guidance — coming soon</div><p class="feat__body">Google Gemini AI for conversational triage — ask questions in plain language and get instant answers.</p></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       BRAND TRUTH SECTION
+       ============================================ -->
+  <section style="padding: 56px 0; background: var(--cream-dark);">
+    <div class="container">
+      <div style="
+        max-width: 600px; margin: 0 auto; text-align: center;
+        background: rgba(253,252,250,0.82);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255,255,255,0.65);
+        border-radius: 24px;
+        padding: 40px 28px;
+        box-shadow: 0 4px 24px rgba(45,95,63,0.09);
+      ">
+        <div style="
+          font-size: 0.7rem; font-weight: 800;
+          letter-spacing: 0.15em; text-transform: uppercase;
+          color: var(--green-mid); margin-bottom: 16px;
+        ">Our Standard</div>
+        <h2 style="
+          font-family: 'DM Serif Display', serif;
+          font-size: clamp(1.4rem, 4vw, 2rem);
+          line-height: 1.2; margin-bottom: 20px; color: var(--text-dark);
+        ">The internet has opinions.<br><em style="font-style:italic; color: var(--green-mid);">We have verified answers.</em></h2>
+        <p style="
+          font-size: 1rem; color: var(--text-mid);
+          line-height: 1.75; margin-bottom: 20px;
+          word-break: normal; white-space: normal;
+        ">
+          Medical information online ranges from accurate to dangerously wrong — and in an emergency,
+          you don't have time to sort through it. ProxiHealth exists to be the certain source:
+          protocols verified against WHO guidelines, guidance tested against African disease patterns,
+          and AI trained to ask the right questions before drawing conclusions.
+        </p>
+        <p style="
+          font-size: 0.97rem; color: var(--text-mid);
+          line-height: 1.75; margin-bottom: 0;
+          word-break: normal; white-space: normal;
+        ">
+          We are not another health website. We are the <strong style="color:var(--text-dark);">clarity in the chaos</strong> —
+          built for the moment between panic and action, where the right information
+          saves a life and the wrong information costs one.
+          <strong style="color:var(--green-deep);">Your health is the priority. Always.</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="hiw">
+    <div class="container">
+      <div style="text-align:center">
+        <div class="eyebrow" style="color:#7AE89A;">How it works</div>
+        <h2 class="sec-title" style="color:#fff;">From symptom to action<br>in 30 seconds</h2>
+        <p class="sec-sub" style="color:rgba(255,255,255,0.52);">Three steps between panic and knowing exactly what to do.</p>
+      </div>
+      <div class="hiw-steps">
+        <div class="hiw-step">
+          <div class="hiw-num">1</div>
+          <div><div class="hiw-title">Describe the emergency</div><p class="hiw-body">Type symptoms into the search bar, or tap Critical Emergency or Symptom Check to start immediately.</p></div>
         </div>
-        <div class="feature-card">
-          <span class="feature-card__icon">🌍</span>
-          <div class="feature-card__title">African disease detection</div>
-          <p class="feature-card__desc">Malaria, typhoid, cholera, meningitis — diseases common across Africa but overlooked by Western health apps.</p>
+        <div class="hiw-step">
+          <div class="hiw-num">2</div>
+          <div><div class="hiw-title">Get step-by-step guidance</div><p class="hiw-body">Clear numbered instructions with specific medication recommendations, doses, and when to seek professional help.</p></div>
         </div>
-        <div class="feature-card">
-          <span class="feature-card__icon">📱</span>
-          <div class="feature-card__title">Mobile-first design</div>
-          <p class="feature-card__desc">Large text, large buttons, readable in sunlight. Designed for real emergencies on real phones in real conditions.</p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-card__icon">🤱</span>
-          <div class="feature-card__title">Critical emergency protocols</div>
-          <p class="feature-card__desc">Childbirth, CPR, severe bleeding, snake bite, burns, choking — detailed step-by-step guidance for the most common deadly emergencies.</p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-card__icon">💊</span>
-          <div class="feature-card__title">Specific care recommendations</div>
-          <p class="feature-card__desc">Not just "monitor at home" — actual medication names, doses, and specific actions tailored to each condition.</p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-card__icon">🔒</span>
-          <div class="feature-card__title">Honest and transparent</div>
-          <p class="feature-card__desc">We're testing AI-assisted emergency care and we're honest about it. No hiding behind "educational purposes only."</p>
+        <div class="hiw-step">
+          <div class="hiw-num">3</div>
+          <div><div class="hiw-title">Act confidently</div><p class="hiw-body">Everything works offline. Print protocols in advance. Share with community health workers across your area.</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- How it works -->
-  <section class="how-it-works">
+  <!-- EMERGENCY CTA -->
+  <section class="cta-section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-header__tag">How it works</span>
-        <h2 style="color:#fff;">From symptom to action in 30 seconds</h2>
-        <p>Three steps between panic and knowing exactly what to do.</p>
-      </div>
-      <div class="how-steps">
-        <div class="how-step">
-          <div class="how-step__num">1</div>
-          <div class="how-step__content">
-            <h4>Describe the emergency</h4>
-            <p>Select from emergency protocols or answer a few triage questions in plain language.</p>
-          </div>
-        </div>
-        <div class="how-step">
-          <div class="how-step__num">2</div>
-          <div class="how-step__content">
-            <h4>Get step-by-step guidance</h4>
-            <p>Clear numbered instructions, specific medication recommendations, and when to seek help.</p>
-          </div>
-        </div>
-        <div class="how-step">
-          <div class="how-step__num">3</div>
-          <div class="how-step__content">
-            <h4>Act confidently</h4>
-            <p>Everything works offline. Print protocols in advance. Share with community health workers.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Emergency CTA -->
-  <section class="emg-cta">
-    <div class="container">
-      <div class="emg-cta__card">
-        <span class="emg-cta__icon">🆘</span>
-        <h2 class="emg-cta__title">Is someone in danger right now?</h2>
-        <p class="emg-cta__sub">Go straight to the emergency protocols — childbirth, CPR, bleeding, snake bite and more.</p>
+      <div class="cta-card">
+        <div class="cta-card__eyebrow">🚨 Emergency right now?</div>
+        <h2 class="cta-card__title">Is someone in danger?</h2>
+        <p class="cta-card__sub">Go straight to the emergency protocols — childbirth, CPR, bleeding, snake bite, burns and more.</p>
         <a href="emergency.html" class="btn btn--emergency btn--inline" style="font-size:1.05rem; padding:16px 36px;">
           Open Emergency Guide
         </a>
@@ -395,30 +546,92 @@
     </div>
   </section>
 
-  <!-- Disclaimer block -->
-  <div class="container">
-    <div style="background: rgba(248,246,243,0.8); border: 1px solid #D8E5DA; border-radius: 14px; padding: 18px 20px; margin-bottom: 32px; font-size: 0.875rem; color: #3B5243; line-height: 1.6; backdrop-filter: blur(10px);">
-      <strong>About ProxiHealth:</strong> This platform is being tested as an AI-assisted tool to reduce preventable deaths from emergencies in Africa. It is not a replacement for emergency services or professional medical care. Created by Louis Nkan. Starting in Nigeria 🇳🇬 · Pan-African in vision 🌍
-    </div>
-  </div>
-
-  <!-- Footer -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
       <div class="footer__brand">ProxiHealth</div>
+      <div class="footer__geo">
+        <span>🇳🇬 Starting in Nigeria</span>
+        <span>·</span>
+        <span>🌍 Pan-African vision</span>
+        <span>·</span>
+        <span>Built by Louis Nkan</span>
+      </div>
       <p class="footer__tagline">AI-powered emergency guidance for Africa</p>
+      <p style="font-size:0.82rem; color:rgba(255,255,255,0.42); max-width:480px; line-height:1.6; margin-bottom:16px;">
+        The internet has opinions. We have verified answers — protocols built on WHO guidelines,
+        tested against African disease patterns, AI-powered to put your health first.
+      </p>
       <div class="footer__links">
         <a href="emergency.html">Emergency Protocols</a>
         <a href="triage.html">Symptom Check</a>
-        <a href="mailto:contact@getproxihealth.com">Contact</a>
+        <a href="/cdn-cgi/l/email-protection#05666a6b716466714562607175776a7d6c6d606469716d2b666a68">Contact</a>
       </div>
-      <p style="font-size:0.78rem; margin:0; color:rgba(255,255,255,0.3);">
-        © 2026 ProxiHealth · Built by Louis Nkan · Not a medical device · Call 112 in emergencies
+      <p style="font-size:0.76rem; margin:0; color:rgba(255,255,255,0.25);">
+        © 2026 ProxiHealth · Not a medical device · Call 112 in life-threatening emergencies
       </p>
     </div>
   </footer>
 
-  <script src="js/security.js"></script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/security.js"></script>
   <script src="js/app.js"></script>
-</body>
-</html>
+
+  <script>
+    /* ── Search: smart keyword routing + "coming soon" message ── */
+    (function () {
+      const input  = document.getElementById('hero-search');
+      const btn    = document.getElementById('hero-search-btn');
+      const box    = document.getElementById('search-result');
+      const text   = document.getElementById('search-result-text');
+
+      const MAP = [
+        { keys:['childbirth','birth','labour','labor','pregnant','baby','delivery'],
+          page:'emergency.html', label:'Emergency Childbirth protocol' },
+        { keys:['bleed','bleeding','blood','wound','cut','lacerat'],
+          page:'emergency.html', label:'Severe Bleeding protocol' },
+        { keys:['cpr','breathing','unconscious','heart','cardiac','chest pain'],
+          page:'emergency.html', label:'CPR — Adult protocol' },
+        { keys:['snake','bite','venom','poison'],
+          page:'emergency.html', label:'Snake Bite protocol' },
+        { keys:['burn','fire','scald'],
+          page:'emergency.html', label:'Burns protocol' },
+        { keys:['chok','airway','swallow','throat'],
+          page:'emergency.html', label:'Choking protocol' },
+        { keys:['fever','malaria','chill','shiver','temperature','hot'],
+          page:'triage.html',    label:'Malaria / Fever triage' },
+        { keys:['diarrh','vomit','cholera','dehydrat','stomach','loose'],
+          page:'triage.html',    label:'Cholera / Gastroenteritis triage' },
+        { keys:['headache','neck stiff','stiff neck','meningit'],
+          page:'triage.html',    label:'Meningitis / Headache triage' },
+        { keys:['typhoid','abdomen','abdominal'],
+          page:'triage.html',    label:'Typhoid / Abdominal triage' },
+        { keys:['rash','itch','skin','hive'],
+          page:'triage.html',    label:'Rash / Skin triage' },
+        { keys:['back pain','backache','back ache'],
+          page:'triage.html',    label:'Back Pain triage' },
+        { keys:['insect','mosquito','bite','sting'],
+          page:'triage.html',    label:'Insect Bite triage' },
+      ];
+
+      function search() {
+        const q = input.value.trim();
+        if (!q) { input.focus(); return; }
+        const lower = q.toLowerCase();
+        const match = MAP.find(m => m.keys.some(k => lower.includes(k)));
+
+        box.classList.add('visible');
+        if (match) {
+          text.innerHTML = `Based on <strong>"${q}"</strong>, I recommend the
+            <a href="${match.page}" style="color:#7AE89A;font-weight:700;">${match.label} →</a>
+            <br><small style="color:rgba(255,255,255,0.44);margin-top:6px;display:block;">
+            ✨ Full AI responses via Google Gemini — coming in Phase 2.</small>`;
+        } else {
+          text.innerHTML = `I heard <strong>"${q}"</strong>.
+            Try <a href="triage.html" style="color:#7AE89A;font-weight:700;">Symptom Check</a> or
+            <a href="emergency.html" style="color:#7AE89A;font-weight:700;">Emergency Protocols</a>.
+            <br><small style="color:rgba(255,255,255,0.44);margin-top:6px;display:block;">
+            ✨ Full AI responses via Google Gemini — coming in Phase 2.</small>`;
+        }
+      }
+
+      btn.a
