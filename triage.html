@@ -19,6 +19,112 @@
   <!-- GOOGLE_TAG_END -->
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/triage.css" />
+
+  <style>
+    /* ── NAV HAMBURGER ─────────────────────── */
+    .nav__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      overflow: hidden;
+    }
+    .nav__burger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
+    }
+    .nav__burger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 2px;
+      transition: transform 0.25s, opacity 0.2s;
+    }
+    .nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav__menu {
+      max-height: 0;
+      overflow: hidden;
+      background: rgba(26,61,40,0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .nav__menu.open { max-height: 400px; }
+    .nav__menu__inner {
+      padding: 16px 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .nav__menu__link {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-radius: 10px;
+      transition: background 0.15s;
+      display: block;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav__menu__link:hover {
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      text-decoration: none;
+    }
+    .nav__menu__link--sm {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+    }
+    .nav__menu__share {
+      background: rgba(122,232,154,0.15);
+      border: 1px solid rgba(122,232,154,0.3);
+      color: #7AE89A;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav__menu__share:hover { background: rgba(122,232,154,0.22); }
+    .nav__menu__divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 8px 16px;
+    }
+    .nav__menu__tagline {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.28);
+      padding: 4px 16px;
+      margin: 0;
+    }
+
+    /* ── CRITICAL: fix horizontal overflow ── */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+    .container {
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
 
@@ -30,17 +136,30 @@
     <button id="disclaimer-banner__close" aria-label="Dismiss">✕</button>
   </div>
 
-  <!-- Navigation -->
+  <!-- NAV -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="container nav__inner">
       <a href="index.html" class="nav__brand" aria-label="ProxiHealth home">
         <div class="nav__logo">🏥</div>
         <span class="nav__title">ProxiHealth</span>
       </a>
-      <div class="nav__links">
-        <a href="emergency.html" class="nav__link">Emergency</a>
-        <a href="triage.html" class="nav__link nav__link--active">Symptom Check</a>
-        <a href="index.html" class="nav__link">Home</a>
+      <!-- Hamburger button -->
+      <button class="nav__burger" id="nav-burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <!-- Slide-down menu -->
+    <div class="nav__menu" id="nav-menu" aria-hidden="true">
+      <div class="container nav__menu__inner">
+        <a href="emergency.html" class="nav__menu__link">🚨 Emergency Protocols</a>
+        <a href="triage.html"    class="nav__menu__link">🌡️ Symptom Check</a>
+        <a href="index.html"     class="nav__menu__link">🏠 Home</a>
+        <button class="nav__menu__share" id="nav-share-btn">
+          🔗 Share ProxiHealth
+        </button>
+        <div class="nav__menu__divider"></div>
+        <a href="mailto:louisnkan21@gmail.com" class="nav__menu__link nav__menu__link--sm">✉️ Contact: louisnkan21@gmail.com</a>
+        <p class="nav__menu__tagline">AI emergency guidance for Africa · Free · Offline</p>
       </div>
     </div>
   </nav>
