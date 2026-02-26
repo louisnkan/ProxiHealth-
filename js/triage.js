@@ -139,13 +139,103 @@ const ProxiTriage = (() => {
     },
     fever_illness: {
       type: 'question',
-      text: 'How high is the fever and how long has it lasted?',
+      text: 'How long has the fever been present and how did it start?',
       options: [
-        { label: 'Very high (39°C+), started suddenly with shivering and chills', next: 'malaria_path' },
-        { label: 'Moderate fever building over several days with stomach pain', next: 'typhoid_path' },
-        { label: 'High fever with severe headache and stiff neck', next: 'meningitis_path' },
-        { label: 'Fever with vomiting and severe watery diarrhoea', next: 'cholera_path' }
+        { label: 'Started suddenly in the last 24 hours with shivering or chills', next: 'fever_sudden' },
+        { label: 'Building gradually over 2 to 5 days', next: 'fever_gradual' },
+        { label: 'High fever with a severe headache and stiff neck', next: 'meningitis_path' },
+        { label: 'Fever alongside vomiting and very watery diarrhoea', next: 'cholera_path' }
       ]
+    },
+    fever_sudden: {
+      type: 'question',
+      text: 'With the sudden fever, which other symptoms are present?',
+      options: [
+        { label: 'Shivering, sweating in cycles, body aches — typical of a cycle pattern', next: 'malaria_path' },
+        { label: 'Joint pain, rash, or pain behind the eyes', next: 'dengue_path' },
+        { label: 'Sore throat, runny nose, and mild cough', next: 'mild_cold' },
+        { label: 'Chest pain, difficulty breathing, or productive cough', next: 'pneumonia_path' }
+      ]
+    },
+    fever_gradual: {
+      type: 'question',
+      text: 'With the gradually building fever, what other symptoms stand out?',
+      options: [
+        { label: 'Stomach pain, constipation or diarrhoea, and general weakness', next: 'typhoid_path' },
+        { label: 'Cough, night sweats, and weight loss over weeks', next: 'tb_path' },
+        { label: 'Urinary pain, frequent urination, or back pain near kidneys', next: 'uti_path' },
+        { label: 'No clear other symptoms — just a persistent fever', next: 'persistent_fever' }
+      ]
+    },
+    dengue_path: {
+      type: 'result', urgency: 'high',
+      title: 'Possible Dengue or Chikungunya',
+      summary: 'Sudden fever with joint pain, rash, or pain behind the eyes suggests a mosquito-borne viral fever. These are distinct from malaria and require different management.',
+      care: [
+        'Take paracetamol only for fever and pain — do NOT use ibuprofen or aspirin with dengue as it increases bleeding risk.',
+        'Rest completely and drink plenty of fluids — at least 2 litres of water or oral rehydration solution per day.',
+        'Use mosquito nets and repellent to prevent spreading the virus to others via mosquitoes.',
+        'A blood test at a clinic can confirm dengue and check your platelet count.',
+        'Monitor for warning signs closely over the first 5 days.'
+      ],
+      seek: ['Severe abdominal pain', 'Vomiting that won't stop', 'Bleeding from gums, nose, or in urine', 'Rapid breathing or chest tightness', 'Extreme fatigue or restlessness', 'Fever disappears but you feel much worse — this can be the dangerous phase'],
+      diseases: ['Dengue fever', 'Chikungunya', 'Zika virus', 'Malaria']
+    },
+    pneumonia_path: {
+      type: 'result', urgency: 'high',
+      title: 'Possible pneumonia or lower respiratory infection',
+      summary: 'Fever with chest pain and difficulty breathing suggests an infection in the lungs. Pneumonia can become life-threatening quickly, especially in children and elderly people.',
+      care: [
+        'Rest in an upright position — sitting up makes breathing easier than lying flat.',
+        'Take paracetamol for fever and pain.',
+        'Drink warm fluids frequently — water, broth, or warm tea with honey.',
+        'Steam inhalation can help loosen chest congestion.',
+        'Get to a clinic for a chest examination and prescribed antibiotics as soon as possible.'
+      ],
+      seek: ['Breathing rate above 30 breaths per minute in adults', 'Blue tinge to lips or fingernails', 'Confusion or extreme drowsiness', 'Fever above 40°C', 'Coughing up blood or rust-coloured sputum', 'In children: ribs visible with each breath or nostrils flaring'],
+      diseases: ['Bacterial pneumonia', 'Viral pneumonia', 'Bronchitis', 'Tuberculosis', 'COVID-19']
+    },
+    tb_path: {
+      type: 'result', urgency: 'high',
+      title: 'Possible Tuberculosis (TB)',
+      summary: 'A persistent cough lasting more than 2 weeks with fever, night sweats, and weight loss are the classic signs of TB. TB is curable but must be diagnosed and treated by a clinic.',
+      care: [
+        'Do not delay — go to a clinic or TB testing centre as soon as possible for a sputum test or chest X-ray.',
+        'Cover your mouth and nose when coughing to protect those around you.',
+        'Ensure good ventilation in your living space — open windows when possible.',
+        'Eat nutritious food to support your immune system while awaiting diagnosis.',
+        'Do not start or stop any TB treatment without medical supervision.'
+      ],
+      seek: ['Coughing blood', 'Extreme weight loss', 'Severe breathlessness', 'Anyone in your household showing similar symptoms'],
+      diseases: ['Tuberculosis (TB)', 'HIV-related pneumonia', 'Lung cancer', 'Chronic bronchitis']
+    },
+    uti_path: {
+      type: 'result', urgency: 'medium',
+      title: 'Possible urinary tract or kidney infection',
+      summary: 'Fever with urinary pain or frequent urination suggests a bladder or kidney infection. Kidney infections can become serious if untreated.',
+      care: [
+        'Drink at least 2 litres of water per day to help flush the urinary tract.',
+        'Take paracetamol for pain and fever.',
+        'Get to a clinic for a urine test and prescribed antibiotics — UTIs do not clear on their own reliably.',
+        'Avoid holding urine for long periods. Empty your bladder fully each time.',
+        'Women should wipe front to back after using the toilet.'
+      ],
+      seek: ['Fever above 38.5°C with back or side pain near the kidneys', 'Shaking chills — suggests kidney infection', 'Nausea and vomiting alongside urinary symptoms', 'Blood in urine', 'Symptoms not improving after 48 hours of antibiotics'],
+      diseases: ['Urinary tract infection', 'Kidney infection (pyelonephritis)', 'Bladder infection', 'Sexually transmitted infection']
+    },
+    persistent_fever: {
+      type: 'result', urgency: 'high',
+      title: 'Persistent unexplained fever — seek testing',
+      summary: 'A fever that persists for more than 3 days without a clear cause should always be investigated at a clinic. In Africa, the most important causes to rule out are malaria, typhoid, and HIV-related illness.',
+      care: [
+        'Take paracetamol to manage fever while arranging to go to a clinic.',
+        'Keep drinking fluids — fever causes significant fluid loss.',
+        'Note the fever pattern: does it come and go at certain times of day? This helps doctors diagnose the cause.',
+        'Go to a clinic for blood tests — at minimum a malaria RDT and full blood count.',
+        'Do not take leftover antibiotics without a diagnosis — this risks antibiotic resistance and can mask symptoms.'
+      ],
+      seek: ['Fever above 39.5°C', 'Confusion, difficulty waking, or seizures', 'Severe weakness or inability to stand', 'Any rash developing alongside the fever', 'Fever persisting beyond 5 days despite paracetamol'],
+      diseases: ['Malaria', 'Typhoid', 'HIV-related illness', 'Brucellosis', 'Visceral leishmaniasis']
     },
     malaria_path: {
       type: 'result', urgency: 'high',
@@ -314,9 +404,34 @@ const ProxiTriage = (() => {
     const careItems = (node.care || []).map(c => `<li>${c}</li>`).join('');
     const seekItems = (node.seek || []).map(s => `<li>${s}</li>`).join('');
 
-    const diseaseTags = (node.diseases || []).map(d =>
-      `<span class="disease-tag disease-tag--match">${d}</span>`
-    ).join('');
+    // Disease chip → deep-link to specific protocol (hash = auto-opens that protocol)
+    const DISEASE_PROTOCOL_MAP = {
+      // Emergency protocols
+      'Malaria (P. falciparum)': 'emergency.html#malaria',
+      'Malaria': 'emergency.html#malaria',
+      'Cholera': 'emergency.html#cholera',
+      'Typhoid': 'emergency.html#typhoid',
+      'Meningitis': 'emergency.html#meningitis',
+      'Bacterial meningitis': 'emergency.html#meningitis',
+      'Viral meningitis': 'emergency.html#meningitis',
+      'Cardiac arrest': 'emergency.html#cpr_adult',
+      'Laceration': 'emergency.html#bleeding',
+      'Arterial bleeding': 'emergency.html#bleeding',
+      'Internal bleeding': 'emergency.html#bleeding',
+      'Heart attack': 'emergency.html#cpr_adult',
+      'Snake bite': 'emergency.html#snake_bite',
+      'Burns': 'emergency.html#burns',
+      'Choking': 'emergency.html#choking',
+    };
+    const diseaseTags = (node.diseases || []).map(d => {
+      const link = DISEASE_PROTOCOL_MAP[d];
+      if (link) {
+        return `<a href="${link}" class="disease-tag disease-tag--match disease-tag--link" title="View ${d} protocol">
+          ${d} <span style="opacity:0.7;font-size:0.7em;">→</span>
+        </a>`;
+      }
+      return `<span class="disease-tag disease-tag--match">${d}</span>`;
+    }).join('');
 
     const protocolLink = node.protocol
       ? `<a href="emergency.html#${node.protocol}" class="btn btn--primary mt-md btn--inline">View Full Protocol →</a>` : '';
