@@ -1,226 +1,155 @@
-// ProxiHealth Emergency Page - FINAL VERSION
-// WITH LOADING TIMEOUT FIX
+/**
+ * ProxiHealth Emergency.js v3
+ * - Single "Can't reach help" button (no duplicates)
+ * - Inline Call 112 on step 1 only
+ * - 3s JSON timeout with inline fallback
+ * - Print: only protocol content
+ */
 
-document.addEventListener('DOMContentLoaded', function() {
-    const step1 = document.getElementById('emergencyStep1');
-    const step2 = document.getElementById('emergencyStep2');
-    const step3 = document.getElementById('emergencyStep3');
-    
-    const helpComingBtn = document.getElementById('helpComingBtn');
-    const cantReachHelpBtn = document.getElementById('cantReachHelpBtn');
-    const emergencyTypeCards = document.querySelectorAll('.emergency-type-card');
-    
-    let emergencyData = { helpStatus: null, emergencyType: null };
-    
-    // SIMPLIFIED: Only "Can't reach help" button works (removed duplicate)
-    if (cantReachHelpBtn) {
-        cantReachHelpBtn.addEventListener('click', function() {
-            emergencyData.helpStatus = 'cant-reach-help';
-            showStep(step2);
-        });
+const ProxiEmergency = (() => {
+  'use strict';
+
+  let protocols = null;
+
+  const grid       = document.getElementById('protocol-grid');
+  const viewer     = document.getElementById('protocol-viewer');
+  const loadingEl  = document.getElementById('protocol-loading');
+  const fallbackEl = document.getElementById('protocol-fallback');
+  const viewerTitle = document.getElementById('viewer-title');
+  const viewerSteps = document.getElementById('viewer-steps');
+  const backBtn    = document.getElementById('btn-back');
+  const gridWrapper = document.getElementById('protocol-grid-wrapper');
+
+  // ── Inline fallback protocols (if JSON fails) ─────────────
+  const FALLBACK = [
+    {
+      id: 'childbirth', title: 'Emergency Childbirth', icon: '🤱', severity: 'critical',
+      description: 'Baby arriving before reaching hospital',
+      steps: [
+        { num:1, text:'Wash your hands thoroughly with soap and water for at least 30 seconds.', note:'If no soap is available, use hand sanitizer or the cleanest cloth available.' },
+        { num:2, text:'Lay the mother on her back with knees bent, or on her side if more comfortable.', note:'Use folded cloth, a mat, or anything clean under her.' },
+        { num:3, text:'Do not pull the baby. Let the baby come naturally with each contraction.', note:'Pulling can injure the baby\'s neck.' },
+        { num:4, text:'Gently support the baby\'s head with both hands as it appears. Check for cord around neck.', note:'If cord is around neck, gently slip it over the head.' },
+        { num:5, text:'Keep the baby warm skin-to-skin on the mother\'s chest. Cover both with a clean blanket.', note:'Get to a health facility as soon as possible.' }
+      ]
+    },
+    {
+      id: 'bleeding', title: 'Severe Bleeding', icon: '🩸', severity: 'critical',
+      description: 'Uncontrolled external bleeding',
+      steps: [
+        { num:1, text:'Press a clean cloth HARD directly onto the wound without lifting it to check.', note:'Hold firm pressure for at least 10 to 15 minutes continuously.' },
+        { num:2, text:'If blood soaks through, add more cloth on top. Do not remove the first layer.', note:'Removing the first layer disrupts the clot that is forming underneath.' },
+        { num:3, text:'Lay the person flat and raise their legs 30 centimetres if no spine injury is suspected.', note:'This keeps blood flowing to vital organs.' },
+        { num:4, text:'Get to emergency care immediately without releasing pressure during transport.', note:'' }
+      ]
+    },
+    {
+      id: 'cpr_adult', title: 'CPR — Adult', icon: '💓', severity: 'critical',
+      description: 'Person unconscious and not breathing',
+      steps: [
+        { num:1, text:'Check for response by tapping shoulders and shouting. No response and no breathing means start CPR now.', note:'Send someone to call emergency services immediately.' },
+        { num:2, text:'Push hard and fast in the centre of the chest at 100 to 120 compressions per minute.', note:'Press down 5 to 6 centimetres. Release fully between each compression.' },
+        { num:3, text:'After every 30 compressions, tilt the head back, lift the chin, pinch the nose, and give 2 rescue breaths.', note:'Skip rescue breaths if untrained — chest compressions alone still save lives.' },
+        { num:4, text:'Continue without stopping until the person breathes normally, trained help arrives, or you are too exhausted to continue.', note:'' }
+      ]
     }
-    
-    // Emergency type selection
-    emergencyTypeCards.forEach(card => {
-        card.addEventListener('click', function() {
-            const emergencyType = this.getAttribute('data-emergency');
-            emergencyData.emergencyType = emergencyType;
-            sessionStorage.setItem('emergency_data', JSON.stringify(emergencyData));
-            showStep(step3);
-            loadProtocol(emergencyType);
-        });
+  ];
+
+  // ── Render protocol selection grid ───────────────────────
+  function renderGrid(data) {
+    const protos = data ? Object.values(data.protocols) : FALLBACK;
+    protocols = protos;
+
+    ProxiApp.hideLoading(loadingEl);
+
+    grid.innerHTML = protos.map(p => `
+      <button class="protocol-card" data-id="${p.id}" aria-label="Open ${p.title} protocol">
+        <span class="protocol-card__icon">${p.icon}</span>
+        <div class="protocol-card__title">${p.title}</div>
+        <div class="protocol-card__desc">${p.description || ''}</div>
+        <span class="protocol-card__severity severity--${p.severity}">
+          ${p.severity === 'critical' ? '🔴 Critical' : p.severity === 'urgent' ? '🟡 Urgent' : '🟢 Moderate'}
+        </span>
+      </button>
+    `).join('');
+
+    // Single event delegation
+    grid.addEventListener('click', e => {
+      const card = e.target.closest('.protocol-card');
+      if (card) openProtocol(card.dataset.id);
     });
-});
+  }
 
-function showStep(step) {
-    document.querySelectorAll('.emergency-section').forEach(section => {
-        section.classList.remove('active');
+  // ── Open protocol viewer ──────────────────────────────────
+  function openProtocol(id) {
+    const p = protocols.find(pr => pr.id === id);
+    if (!p) return;
+
+    viewerTitle.textContent = `${p.icon} ${p.title}`;
+
+    viewerSteps.innerHTML = `<ul class="emergency-steps">${
+      p.steps.map((s, i) => `
+        <li class="emergency-step">
+          <span class="emergency-step__num">${s.num}</span>
+          <div class="emergency-step__content">
+            <div class="emergency-step__text">${ProxiSecurity.sanitize(s.text)}</div>
+            ${s.note ? `<div class="emergency-step__note">💡 ${ProxiSecurity.sanitize(s.note)}</div>` : ''}
+            ${i === 0 ? `<a href="tel:112" class="call-btn-inline">📞 Call 112</a>` : ''}
+          </div>
+        </li>
+      `).join('')
+    }</ul>`;
+
+    // Show viewer, hide grid
+    gridWrapper.style.display = 'none';
+    viewer.style.display = 'block';
+    viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── Back button ───────────────────────────────────────────
+  function goBack() {
+    viewer.style.display = 'none';
+    gridWrapper.style.display = 'block';
+  }
+
+  // ── Single "Can't reach help" button logic ────────────────
+  // There is ONLY ONE button in the HTML. This handles it.
+  function initNoHelpBtn() {
+    const btn   = document.getElementById('btn-no-help');
+    const panel = document.getElementById('no-help-panel');
+    if (!btn || !panel) return;
+
+    btn.addEventListener('click', () => {
+      if (!ProxiSecurity.rateLimiter.check('no-help', 5, 60000)) return;
+      panel.classList.toggle('hidden');
+      if (!panel.classList.contains('hidden')) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
-    step.classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
 
-function goBack() {
-    const step1 = document.getElementById('emergencyStep1');
-    showStep(step1);
-}
-
-// CRITICAL FIX: Loading timeout + fallback
-async function loadProtocol(emergencyType) {
-    const loadingState = document.getElementById('loadingState');
-    const guidanceContent = document.getElementById('guidanceContent');
-    const protocolTitle = document.getElementById('protocolTitle');
-    const protocolBody = document.getElementById('protocolBody');
-    
-    // Check rate limit
-    if (window.ProxiHealthSecurity) {
-        const rateLimitCheck = window.ProxiHealthSecurity.checkRateLimit('protocol_load');
-        if (!rateLimitCheck.allowed) {
-            showError('Rate Limit Exceeded', rateLimitCheck.message);
-            return;
-        }
-    }
-    
-    // TIMEOUT PROTECTION: If loading takes >3 seconds, show fallback
-    const timeoutId = setTimeout(() => {
-        console.warn('Protocol loading timed out, showing fallback');
-        loadingState.style.display = 'none';
-        guidanceContent.style.display = 'block';
-        protocolTitle.textContent = 'Loading Timeout';
-        protocolBody.innerHTML = renderFallbackGuidance(emergencyType);
-    }, 3000);
-    
-    try {
-        const response = await fetch('data/offline-tree.json');
-        
-        // Clear timeout if successful
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const medicalData = await response.json();
-        const protocol = medicalData.protocols[emergencyType];
-        
-        // Brief loading animation
-        setTimeout(() => {
-            loadingState.style.display = 'none';
-            guidanceContent.style.display = 'block';
-            
-            if (protocol) {
-                protocolTitle.textContent = protocol.title;
-                protocolBody.innerHTML = renderProtocol(protocol);
-            } else {
-                protocolTitle.textContent = 'Protocol Not Available';
-                protocolBody.innerHTML = renderFallbackGuidance(emergencyType);
-            }
-        }, 800);
-        
-    } catch (error) {
-        clearTimeout(timeoutId);
-        console.error('Error loading protocol:', error);
-        showError('Connection Error', 'Unable to load medical protocol. Please check your internet connection.');
-    }
-}
-
-function showError(title, message) {
-    const loadingState = document.getElementById('loadingState');
-    const guidanceContent = document.getElementById('guidanceContent');
-    const protocolTitle = document.getElementById('protocolTitle');
-    const protocolBody = document.getElementById('protocolBody');
-    
-    loadingState.style.display = 'none';
-    guidanceContent.style.display = 'block';
-    protocolTitle.textContent = title;
-    protocolBody.innerHTML = `
-        <div style="background: #FFE5E5; padding: 24px; border-radius: 16px; border: 2px solid #D84315; text-align: center;">
-            <p style="font-weight: 700; margin-bottom: 16px; font-size: 18px; color: #D84315;">${message}</p>
-            <a href="tel:112" style="display: inline-block; padding: 16px 24px; background: #D84315; color: white; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 18px;">
-                Call 112 Now
-            </a>
-        </div>
-    `;
-}
-
-function renderProtocol(protocol) {
-    let html = `
-        <div style="background: linear-gradient(135deg, #3D7F5F, #2D5F3F); color: white; padding: 24px; border-radius: 16px; margin-bottom: 24px; text-align: center;">
-            <div style="font-size: 32px; margin-bottom: 8px;">✓</div>
-            <h3 style="margin-bottom: 12px; font-size: 20px; font-weight: 700;">Emergency Protocol Active</h3>
-            <p style="font-size: 16px; opacity: 0.95;">AI-guided instructions based on WHO guidelines</p>
-        </div>
-    `;
-    
-    let contactAdded = false;
-    
-    protocol.steps.forEach((phase, phaseIndex) => {
-        html += `
-            <div style="background: white; border: 2px solid #E2E8F0; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                <div style="background: linear-gradient(135deg, #E8F4F0, #F8F6F3); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
-                    <h3 style="color: #2D5F3F; font-size: 18px; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; word-wrap: break-word;">
-                        ${phase.title}
-                    </h3>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 24px;">
-        `;
-        
-        phase.actions.forEach((action, actionIndex) => {
-            html += `
-                <div style="display: flex; gap: 16px; align-items: flex-start;">
-                    <div style="flex-shrink: 0; width: 56px; height: 56px; background: linear-gradient(135deg, #3D7F5F, #2D5F3F); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 28px; box-shadow: 0 4px 12px rgba(45, 95, 63, 0.3);">
-                        ${action.step || (actionIndex + 1)}
-                    </div>
-                    <div style="flex: 1;">
-                        <h4 style="font-size: 20px; font-weight: 700; color: #2D3748; margin-bottom: 12px; line-height: 1.4; word-wrap: break-word; overflow-wrap: break-word;">
-                            ${action.instruction}
-                        </h4>
-                        <p style="font-size: 17px; color: #4A5568; line-height: 1.7; margin: 0; word-wrap: break-word; overflow-wrap: break-word;">
-                            ${action.detail}
-                        </p>
-            `;
-            
-            if (!contactAdded && phaseIndex === 0 && actionIndex === 0 && protocol.emergency_contact) {
-                html += `
-                    <div style="margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap;">
-                        <a href="tel:${protocol.emergency_contact.primary}" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; background: #3D7F5F; color: white; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 17px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                            📞 Call ${protocol.emergency_contact.primary}
-                        </a>
-                    </div>
-                `;
-                contactAdded = true;
-            }
-            
-            html += `</div></div>`;
-        });
-        
-        html += `</div>`;
-        
-        if (phase.warnings) {
-            html += `
-                <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 16px; border-radius: 12px; margin-top: 24px;">
-                    <p style="font-weight: 700; color: #d97706; margin-bottom: 12px; font-size: 17px;">⚠️ Important - Avoid These:</p>
-                    <ul style="margin: 0; padding-left: 24px; color: #4A5568; font-size: 16px; line-height: 1.7;">
-                        ${phase.warnings.map(w => `<li style="margin-bottom: 8px; word-wrap: break-word;">${w}</li>`).join('')}
-                    </ul>
-                </div>
-            `;
-        }
-        
-        html += `</div>`;
+    document.getElementById('btn-close-no-help')?.addEventListener('click', () => {
+      panel.classList.add('hidden');
     });
-    
-    html += `
-        <div style="background: #F3F4F6; padding: 16px; border-radius: 12px; text-align: center; margin-top: 32px;">
-            <p style="color: #718096; font-size: 14px; line-height: 1.6; margin: 0;">
-                ℹ️ <strong>AI Emergency Guidance</strong><br>
-                Based on WHO protocols. Professional care should be sought when available.
-            </p>
-        </div>
-    `;
-    
-    return html;
-}
+  }
 
-function renderFallbackGuidance(emergencyType) {
-    const emergencyTitles = {
-        'severe-bleeding': 'Severe Bleeding',
-        'not-breathing': 'Not Breathing / CPR',
-        'childbirth': 'Emergency Childbirth',
-        'chest-pain': 'Chest Pain',
-        'snake-bite': 'Snake Bite',
-        'severe-burn': 'Severe Burns'
-    };
-    
-    const title = emergencyTitles[emergencyType] || 'Emergency';
-    
-    return `
-        <div style="background: #FEF3C7; padding: 24px; border-radius: 16px; border: 2px solid #F59E0B; text-align: center;">
-            <p style="font-weight: 700; margin-bottom: 16px; font-size: 18px; color: #2D3748;">Protocol for ${title}</p>
-            <p style="color: #4A5568; margin-bottom: 24px;">Unable to load detailed protocol. Call emergency services immediately.</p>
-            <a href="tel:112" style="display: inline-block; padding: 16px 24px; background: #3D7F5F; color: white; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 18px;">
-                Call 112 - Emergency Services
-            </a>
-        </div>
-    `;
-}
+  // ── Init ─────────────────────────────────────────────────
+  function init() {
+    if (!grid) return;
+    ProxiApp.showLoading(loadingEl);
+
+    ProxiApp.loadJSON(
+      'data/offline-tree.json',
+      data => renderGrid(data),
+      () => { renderGrid(null); ProxiApp.showFallback(loadingEl, fallbackEl); },
+      3000
+    );
+
+    if (backBtn) backBtn.addEventListener('click', goBack);
+    initNoHelpBtn();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  return { openProtocol, goBack };
+})();
+
+window.ProxiEmergency = ProxiEmergency;
