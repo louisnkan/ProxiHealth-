@@ -1,207 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Critical emergency medical guidance - Call 112 and get immediate AI-powered first aid instructions">
-    <title>Critical Emergency - ProxiHealth</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/emergency.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ProxiHealth Emergency Protocols — step-by-step guidance for childbirth, bleeding, CPR, burns, snake bite and more." />
+  <meta name="theme-color" content="#2D5F3F" />
+  <title>Emergency Protocols — ProxiHealth</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/emergency.css" />
 </head>
-<body class="emergency-body">
-    <!-- Emergency Alert Banner (REDESIGNED: Calm, Not Panic) -->
-    <div class="emergency-banner">
-        <div class="container">
-            <div class="banner-content">
-                <div class="pulse-indicator"></div>
-                <span>EMERGENCY PROTOCOL ACTIVE</span>
-            </div>
-        </div>
+<body>
+
+  <!-- Non-blocking disclaimer (dismissible) -->
+  <div id="disclaimer-banner">
+    <span id="disclaimer-banner__text">
+      ⚕️ These protocols are for when professional care is unreachable. Always call 112 if possible.
+    </span>
+    <button id="disclaimer-banner__close" aria-label="Dismiss">✕</button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container nav__inner">
+      <a href="index.html" class="nav__brand" aria-label="ProxiHealth home">
+        <div class="nav__logo">🏥</div>
+        <span class="nav__title">ProxiHealth</span>
+      </a>
+      <div class="nav__links">
+        <a href="emergency.html" class="nav__link nav__link--active">Emergency</a>
+        <a href="triage.html" class="nav__link">Symptom Check</a>
+        <a href="index.html" class="nav__link">Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header — GREEN (calm, not panic-red) -->
+  <header class="emergency-header print-hide">
+    <div class="container">
+      <div class="emergency-header__pulse">Protocols active</div>
+      <h1 class="page-header__title" style="color:#fff; margin-bottom:8px;">Emergency Protocols</h1>
+      <p class="page-header__subtitle">
+        Step-by-step guidance for critical emergencies. All protocols work without internet.
+      </p>
+    </div>
+  </header>
+
+  <main class="container" style="padding-top:28px; padding-bottom:52px;">
+
+    <!-- Offline indicator -->
+    <div id="offline-indicator" style="display:none;"></div>
+
+    <!-- Loading state -->
+    <div id="protocol-loading" class="loading-spinner" aria-live="polite">
+      <div class="spinner" role="status"></div>
+      <p class="text-sm" style="color:var(--text-light);margin:0;">Loading protocols…</p>
     </div>
 
-    <!-- Main Emergency Screen -->
-    <main class="emergency-main">
-        <div class="container">
-            <!-- Step 1: Immediate Action -->
-            <section id="emergencyStep1" class="emergency-section active">
-                <div class="emergency-card urgent">
-                    <div class="emergency-icon">
-                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" fill="currentColor" opacity="0.2"/>
-                            <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    
-                    <h1>🚨 CRITICAL EMERGENCY DETECTED</h1>
-                    
-                    <div class="emergency-action-box">
-                        <h2>CALL FOR HELP IMMEDIATELY</h2>
-                        <div class="emergency-numbers">
-                            <a href="tel:112" class="call-btn primary">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" fill="currentColor"/>
-                                </svg>
-                                <span>
-                                    <strong>CALL 112</strong>
-                                    <small>Nigeria Emergency Services</small>
-                                </span>
-                            </a>
-                            
-                            <div class="alternative-numbers">
-                                <p>Alternative numbers:</p>
-                                <a href="tel:767" class="call-btn secondary">767 (Lagos)</a>
-                                <a href="tel:199" class="call-btn secondary">199 (Police)</a>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Fallback notice (shown if JSON fails after 3s) -->
+    <div id="protocol-fallback" aria-live="polite">
+      <div class="status-banner status-banner--warn mb-md">
+        ⚠️ Couldn't load full protocol library. Showing essential protocols below.
+      </div>
+    </div>
 
-                    <div class="emergency-options">
-                        <p class="options-label">What happens next?</p>
-                        
-                        <button class="option-btn success" id="helpComingBtn">
-                            <div class="option-icon">✓</div>
-                            <div class="option-content">
-                                <strong>Help is on the way</strong>
-                                <span>Show me what to do while waiting for ambulance</span>
-                            </div>
-                        </button>
+    <!-- Protocol Selection -->
+    <div id="protocol-grid-wrapper">
+      <p style="font-size:0.9rem; color:var(--text-light); margin-bottom:12px;">Choose the emergency situation:</p>
+      <div id="protocol-grid" class="protocol-grid" role="list" aria-label="Emergency protocols"></div>
 
-                        <button class="option-btn warning" id="cantReachHelpBtn">
-                            <div class="option-icon">🤖</div>
-                            <div class="option-content">
-                                <strong>Can't reach emergency services</strong>
-                                <span>Get offline AI guidance (works without internet)</span>
-                            </div>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Step 2: Emergency Type Selection -->
-            <section id="emergencyStep2" class="emergency-section">
-                <div class="back-btn" onclick="goBack()">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M12 4L6 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Back
-                </div>
-
-                <div class="emergency-card">
-                    <h2>What is the emergency?</h2>
-                    <p class="section-subtitle">Select the condition that best describes the situation</p>
-
-                    <div class="emergency-type-grid">
-                        <button class="emergency-type-card" data-emergency="severe-bleeding">
-                            <div class="type-icon">🩸</div>
-                            <h3>Severe Bleeding</h3>
-                            <p>Heavy bleeding that won't stop, deep wounds</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="not-breathing">
-                            <div class="type-icon">🫁</div>
-                            <h3>Not Breathing</h3>
-                            <p>Unconscious, choking, stopped breathing</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="childbirth">
-                            <div class="type-icon">👶</div>
-                            <h3>Emergency Childbirth</h3>
-                            <p>Baby is coming, labor complications</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="chest-pain">
-                            <div class="type-icon">💔</div>
-                            <h3>Severe Chest Pain</h3>
-                            <p>Heart attack symptoms, crushing chest pain</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="snake-bite">
-                            <div class="type-icon">🐍</div>
-                            <h3>Snake/Animal Bite</h3>
-                            <p>Venomous snake, scorpion, or animal bite</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="severe-burn">
-                            <div class="type-icon">🔥</div>
-                            <h3>Severe Burns</h3>
-                            <p>Large burns, electrical burns, chemical burns</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="seizure">
-                            <div class="type-icon">⚡</div>
-                            <h3>Seizure/Convulsion</h3>
-                            <p>Uncontrolled shaking, loss of consciousness</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="head-injury">
-                            <div class="type-icon">🤕</div>
-                            <h3>Severe Head Injury</h3>
-                            <p>Unconscious after fall, bleeding from head</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="poisoning">
-                            <div class="type-icon">☠️</div>
-                            <h3>Poisoning</h3>
-                            <p>Swallowed chemicals, pesticides, overdose</p>
-                        </button>
-
-                        <button class="emergency-type-card" data-emergency="other">
-                            <div class="type-icon">❓</div>
-                            <h3>Other Emergency</h3>
-                            <p>Describe your emergency to AI</p>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Step 3: AI Guidance (Placeholder for Phase 3) -->
-            <section id="emergencyStep3" class="emergency-section">
-                <div class="back-btn" onclick="goBack()">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M12 4L6 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Back
-                </div>
-
-                <div class="emergency-card">
-                    <div class="loading-state" id="loadingState">
-                        <div class="spinner"></div>
-                        <h3>Analyzing emergency...</h3>
-                        <p>AI is preparing life-saving instructions</p>
-                    </div>
-
-                    <div class="guidance-content" id="guidanceContent" style="display: none;">
-                        <!-- AI guidance will be inserted here in Phase 3 -->
-                        <div class="protocol-header">
-                            <div class="protocol-icon">🆘</div>
-                            <h2 id="protocolTitle">Emergency Protocol</h2>
-                        </div>
-
-                        <div class="protocol-body" id="protocolBody">
-                            <!-- Dynamic content from AI or offline tree -->
-                        </div>
-
-                        <div class="protocol-actions">
-                            <button class="btn-primary" onclick="window.print()">
-                                Print Instructions
-                            </button>
-                            <button class="btn-secondary" onclick="location.href='index.html'">
-                                Back to Home
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+      <!-- SINGLE "Can't reach help" section — no duplicate button -->
+      <div class="no-help-section mt-lg">
+        <div class="no-help-section__title">Can't reach emergency services?</div>
+        <div class="no-help-section__desc">
+          Select a protocol above for detailed guidance, or tap below for general advice when you're completely alone.
         </div>
-    </main>
+        <button class="btn btn--secondary btn--inline mt-sm" id="btn-no-help" style="margin-top:12px;">
+          🧭 I'm alone with no help available
+        </button>
+      </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="emergency-footer">
-        <div class="container">
-            <p>⚠️ This AI guidance is for emergencies where professional help is unavailable. Always seek professional medical care when possible.</p>
+    <!-- "No help" guidance panel (single, toggled by single button above) -->
+    <div id="no-help-panel" class="hidden mt-lg" aria-live="polite">
+      <div class="card card--green">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+          <h3 style="margin-bottom:14px; word-break:normal;">When you're alone with no help</h3>
+          <button id="btn-close-no-help" aria-label="Close" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--text-light);flex-shrink:0;padding:4px 8px;min-height:36px;-webkit-tap-highlight-color:transparent;">✕</button>
         </div>
-    </footer>
+        <div class="step">
+          <span class="step__number">1</span>
+          <div class="step__content">
+            <div class="step__title">Select the most relevant protocol above</div>
+            <div class="step__desc">Every protocol is written for solo caregivers with limited resources and equipment.</div>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__number">2</span>
+          <div class="step__content">
+            <div class="step__title">Send your location to someone immediately</div>
+            <div class="step__desc">Text your GPS coordinates or nearest landmark to any contact who can send or arrange help.</div>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__number">3</span>
+          <div class="step__content">
+            <div class="step__title">Read the protocol steps aloud as you work</div>
+            <div class="step__desc">Narrating each step helps you stay focused and helps any bystanders understand how to assist you.</div>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__number">4</span>
+          <div class="step__content">
+            <div class="step__title">Move toward any health facility</div>
+            <div class="step__desc">A pharmacy, clinic, or community health worker — any trained person makes a difference.</div>
+          </div>
+        </div>
+        <a href="triage.html" class="btn btn--primary mt-md">Check symptoms with triage →</a>
+      </div>
+    </div>
 
-    <script src="js/emergency.js"></script>
+    <!-- Protocol Viewer (hidden until card is selected) -->
+    <div id="protocol-viewer" class="protocol-viewer" style="display:none;" aria-live="polite">
+      <div class="protocol-viewer__header">
+        <button class="protocol-viewer__back" id="btn-back" aria-label="Back to all protocols">←</button>
+        <h2 class="protocol-viewer__title" id="viewer-title"></h2>
+      </div>
+      <div class="protocol-viewer__body">
+        <div id="viewer-steps"></div>
+
+        <div style="background:rgba(235,245,236,0.6); border:1px solid var(--green-pale); border-radius:12px; padding:14px 16px; margin-top:24px; font-size:0.85rem; color:var(--text-mid); line-height:1.55;">
+          <strong>Important:</strong> These protocols are for emergencies when professional care is unreachable. Always call 112 and get to a hospital as soon as it is safe to do so.
+        </div>
+
+        <!-- Print button visible only in viewer -->
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:20px;" class="print-hide">
+          <button class="btn btn--secondary btn--inline" onclick="window.print()">🖨️ Print Protocol</button>
+          <button class="btn btn--secondary btn--inline" onclick="ProxiEmergency.goBack()">← All Protocols</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer print-hide">
+    <div class="container">
+      <div class="footer__brand">ProxiHealth</div>
+      <div class="footer__links">
+        <a href="index.html">Home</a>
+        <a href="triage.html">Symptom Check</a>
+      </div>
+      <p style="font-size:0.78rem; margin:0; color:rgba(255,255,255,0.3);">
+        © 2026 ProxiHealth · Call 112 for life-threatening emergencies
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/security.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/emergency.js"></script>
 </body>
-    </html>
+</html>
