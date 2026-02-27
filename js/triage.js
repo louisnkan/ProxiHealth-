@@ -301,7 +301,8 @@ const ProxiTriage = (() => {
         { label: 'Insect bite with pain, itching, or swelling', next: 'insect_bite' },
         { label: 'Back pain or muscle pain', next: 'back_pain' },
         { label: 'Mild fever, cold, or sore throat', next: 'mild_cold' },
-        { label: 'Rash or skin irritation', next: 'rash' }
+        { label: 'Rash or skin irritation', next: 'rash' },
+        { label: 'Eye, ear, tooth, worm, or digestive issue', next: 'non_urgent_list' }
       ]
     },
     insect_bite: {
@@ -360,6 +361,133 @@ const ProxiTriage = (() => {
       ],
       seek: ['Rash appears as small red or purple spots that do not fade when you press a glass against them — go immediately (meningitis)', 'Rash spreads rapidly across the body', 'Fever above 38.5°C with the rash', 'Difficulty breathing or facial swelling', 'Rash is very painful rather than just itchy'],
       diseases: ['Contact dermatitis', 'Allergic reaction', 'Measles', 'Chickenpox', 'Meningococcal rash']
+    },
+
+    // ── NON-URGENT OFFLINE ILLNESS LIST ──────────────────────
+    // These are accessible from the non-urgent entry point on the homepage
+
+    non_urgent_list: {
+      type: 'question',
+      text: 'Which of these best describes what you or the patient is experiencing?',
+      options: [
+        { label: 'Eye pain, redness, or discharge', next: 'conjunctivitis' },
+        { label: 'Toothache or jaw swelling', next: 'toothache' },
+        { label: 'Ear pain or blocked ear', next: 'ear_infection' },
+        { label: 'Painful urination or discharge', next: 'uti_path' },
+        { label: 'Worm symptoms — itchy bottom, worms in stool', next: 'worms' },
+        { label: 'Muscle pain or body aches without fever', next: 'muscle_pain' },
+        { label: 'Heartburn, acid reflux, or indigestion', next: 'heartburn' },
+        { label: 'Constipation — no stool for 3 or more days', next: 'constipation' }
+      ]
+    },
+
+    conjunctivitis: {
+      type: 'result', urgency: 'low',
+      title: 'Possible conjunctivitis (pink eye)',
+      summary: 'Redness, discharge, or crusting in the eye is usually bacterial or viral conjunctivitis. Highly contagious but usually not dangerous unless it involves pain or vision change.',
+      care: [
+        'Bathe the eye with clean cooled boiled water using a clean cloth. Always wipe from the inner corner outward.',
+        'Do not share towels, pillowcases, or face cloths with others.',
+        'Chloramphenicol 0.5% eye drops (available without prescription at most pharmacies) applied 4 times daily for 5 days treats bacterial conjunctivitis.',
+        'Wash hands thoroughly before and after touching the eye area.',
+        'Viral conjunctivitis usually clears on its own in 1 to 2 weeks with clean hygiene alone.'
+      ],
+      seek: ['Severe eye pain — not just irritation', 'Vision becomes blurred or reduced', 'The eye becomes very swollen', 'No improvement after 5 days of treatment', 'Newborn with eye discharge — see a doctor same day'],
+      diseases: ['Bacterial conjunctivitis', 'Viral conjunctivitis', 'Allergic conjunctivitis', 'Trachoma']
+    },
+
+    toothache: {
+      type: 'result', urgency: 'low',
+      title: 'Toothache or dental abscess',
+      summary: 'Dental pain is usually from tooth decay, a cracked tooth, or a dental abscess. An untreated abscess can spread infection and become dangerous.',
+      care: [
+        'Take ibuprofen 400mg with food every 6 to 8 hours for pain — it works better than paracetamol for dental pain.',
+        'Rinse with warm salt water (half teaspoon salt in a glass of warm water) 2 to 3 times per day.',
+        'Avoid very hot, very cold, or very sweet food and drinks which worsen pain.',
+        'Clove oil applied carefully to the affected tooth or gum with a cotton swab can provide temporary relief.',
+        'See a dentist as soon as possible — dental pain does not resolve without treatment.'
+      ],
+      seek: ['Swelling spreading to the jaw, neck, or under the eye', 'Difficulty opening your mouth wide', 'Fever developing alongside the toothache', 'Difficulty swallowing or breathing'],
+      diseases: ['Dental caries', 'Dental abscess', 'Pericoronitis', 'Gum disease']
+    },
+
+    ear_infection: {
+      type: 'result', urgency: 'low',
+      title: 'Possible ear infection or otitis',
+      summary: 'Ear pain is most commonly caused by infection (otitis media — middle ear, or otitis externa — outer canal). Common in children but affects all ages.',
+      care: [
+        'Take paracetamol or ibuprofen for pain relief at the doses on the packet.',
+        'Apply a warm cloth or warm water bottle wrapped in a cloth gently against the ear for pain relief.',
+        'Do not insert anything into the ear — cotton buds, fingers, or traditional remedies can worsen injury.',
+        'Keep the ear dry. When bathing, place cotton wool coated with petroleum jelly in the outer ear.',
+        'Most mild ear infections in adults resolve in 3 to 5 days. Seek antibiotics if not improving.'
+      ],
+      seek: ['Discharge of pus or fluid from the ear', 'Fever above 38.5°C', 'Hearing loss developing', 'Swelling or redness behind the ear', 'Symptoms not improving after 3 days', 'Child under 2 years with ear pain — see a doctor'],
+      diseases: ['Otitis media', 'Otitis externa', 'Ruptured eardrum', 'Mastoiditis']
+    },
+
+    worms: {
+      type: 'result', urgency: 'low',
+      title: 'Intestinal worms',
+      summary: 'Intestinal worms (roundworm, hookworm, threadworm) are extremely common in Africa. Itching around the anus, especially at night, visible worms in stool, and poor growth in children are key signs.',
+      care: [
+        'Mebendazole 500mg as a single dose OR 100mg twice daily for 3 days treats most intestinal worms. Available over the counter at pharmacies.',
+        'Albendazole 400mg as a single dose is an alternative and treats a wider range of worm species.',
+        'Treat all household members and children at the same time to prevent re-infection.',
+        'Wash hands thoroughly with soap before eating and after using the toilet.',
+        'Wash all fruits and vegetables. Cook meat thoroughly.',
+        'Wear footwear outdoors — hookworm enters through bare feet.'
+      ],
+      seek: ['Severe abdominal pain', 'Worms visible coming from the nose or mouth', 'Child with a swollen belly and not growing', 'Coughing up worms', 'Anaemia signs: very pale gums or inner eyelids, extreme tiredness'],
+      diseases: ['Roundworm (Ascaris)', 'Hookworm', 'Threadworm (Pinworm)', 'Tapeworm', 'Whipworm']
+    },
+
+    muscle_pain: {
+      type: 'result', urgency: 'low',
+      title: 'Muscle pain or body aches',
+      summary: 'Muscle pain without fever is usually from overuse, strain, or tension. With fever it suggests infection — use the Fever triage path if fever is present.',
+      care: [
+        'Rest the affected area for 24 to 48 hours. Avoid the activity that caused the pain.',
+        'Apply ice wrapped in cloth for 10 to 15 minutes during the first 24 to 48 hours for injury-related pain.',
+        'After 48 hours, switch to gentle heat — warm cloth or warm water bottle — to relax tight muscles.',
+        'Ibuprofen 400mg every 6 to 8 hours with food reduces both pain and inflammation.',
+        'Gentle stretching and movement (not rest) helps faster recovery for most muscle strains.',
+        'Oral rehydration salts help if pain follows heavy physical work in heat — dehydration causes severe muscle cramps.'
+      ],
+      seek: ['Extreme weakness or inability to use a limb', 'Muscle pain that is getting steadily worse over days', 'Dark brown or cola-coloured urine after intense exercise — go immediately (rhabdomyolysis)', 'Neck stiffness combined with headache and fever'],
+      diseases: ['Muscle strain', 'Exercise-induced soreness', 'Dehydration', 'Sickle cell crisis', 'Early malaria']
+    },
+
+    heartburn: {
+      type: 'result', urgency: 'low',
+      title: 'Heartburn or acid indigestion',
+      summary: 'A burning feeling in the chest or throat after eating is usually acid reflux. Common and manageable at home, but persistent cases need medical attention.',
+      care: [
+        'Antacids such as aluminium hydroxide/magnesium hydroxide (Maalox) or calcium carbonate chewable tablets provide fast relief.',
+        'Omeprazole 20mg once daily before breakfast for 7 to 14 days treats persistent acid reflux. Available at most pharmacies.',
+        'Avoid lying down for at least 2 hours after eating.',
+        'Avoid spicy food, citrus, fatty food, alcohol, and large late-night meals.',
+        'Sleep with your head and chest slightly elevated.',
+        'Drink small amounts of water frequently rather than large quantities at once.'
+      ],
+      seek: ['Difficulty swallowing — food gets stuck', 'Vomiting blood or black material', 'Unexplained weight loss alongside the heartburn', 'Chest pain that spreads to the arm, jaw, or back — this could be cardiac, not acid'],
+      diseases: ['Gastroesophageal reflux disease (GERD)', 'Peptic ulcer', 'Gastritis', 'Hiatal hernia']
+    },
+
+    constipation: {
+      type: 'result', urgency: 'low',
+      title: 'Constipation',
+      summary: 'No stool for 3 or more days, or hard/painful stool, is constipation. Usually due to low fibre, low water intake, or inactivity.',
+      care: [
+        'Drink at least 2 litres of water per day — dehydration is the most common cause.',
+        'Eat high-fibre foods: fruits (mango, pawpaw, guava), vegetables, beans, and whole grains.',
+        'Bisacodyl 5mg tablets taken at night is a gentle effective laxative available at most pharmacies.',
+        'Glycerine suppositories provide faster relief if oral laxatives are unavailable.',
+        'Walk or move around regularly — physical activity helps bowel movement.',
+        'Never strain forcefully on the toilet — this causes haemorrhoids.'
+      ],
+      seek: ['No stool for more than 7 days despite treatment', 'Severe abdominal pain or bloating', 'Blood in stool', 'Alternating constipation and diarrhoea over weeks', 'Unexplained weight loss alongside constipation'],
+      diseases: ['Functional constipation', 'Irritable bowel syndrome', 'Hypothyroidism', 'Bowel obstruction']
     }
   };
 
