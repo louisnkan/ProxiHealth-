@@ -19,111 +19,28 @@
   <!-- GOOGLE_TAG_END -->
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/triage.css" />
-
   <style>
-    /* ── NAV HAMBURGER ─────────────────────── */
-    .nav__inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: nowrap;
-      overflow: hidden;
-    }
-    .nav__burger {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      -webkit-tap-highlight-color: transparent;
-      flex-shrink: 0;
-    }
-    .nav__burger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: rgba(255,255,255,0.85);
-      border-radius: 2px;
-      transition: transform 0.25s, opacity 0.2s;
-    }
-    .nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-    .nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    .nav__menu {
-      max-height: 0;
-      overflow: hidden;
-      background: rgba(26,61,40,0.98);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
-    .nav__menu.open { max-height: 400px; }
-    .nav__menu__inner {
-      padding: 16px 0 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .nav__menu__link {
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 12px 16px;
-      border-radius: 10px;
-      transition: background 0.15s;
-      display: block;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .nav__menu__link:hover {
-      background: rgba(255,255,255,0.10);
-      color: #fff;
-      text-decoration: none;
-    }
-    .nav__menu__link--sm {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.55);
-    }
-    .nav__menu__share {
-      background: rgba(122,232,154,0.15);
-      border: 1px solid rgba(122,232,154,0.3);
-      color: #7AE89A;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      padding: 12px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      text-align: left;
-      transition: background 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .nav__menu__share:hover { background: rgba(122,232,154,0.22); }
-    .nav__menu__divider {
-      height: 1px;
-      background: rgba(255,255,255,0.08);
-      margin: 8px 16px;
-    }
-    .nav__menu__tagline {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.28);
-      padding: 4px 16px;
-      margin: 0;
-    }
-
-    /* ── CRITICAL: fix horizontal overflow ── */
-    html, body {
-      overflow-x: hidden;
-      max-width: 100%;
-    }
-    .container {
-      overflow: hidden;
-    }
+    html, body { overflow-x: hidden; max-width: 100%; }
+    .brand-mark { width:36px; height:36px; flex-shrink:0; background:linear-gradient(135deg,#5CA373 0%,#2D5F3F 100%); border-radius:10px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.28); }
+    .brand-mark svg { width:19px; height:19px; }
+    .brand-text { display:flex; flex-direction:column; line-height:1; }
+    .brand-name { font-family:'DM Sans',sans-serif; font-size:1.08rem; font-weight:800; color:#fff; letter-spacing:-0.02em; }
+    .brand-sub  { font-size:0.58rem; font-weight:500; color:rgba(255,255,255,0.48); letter-spacing:0.07em; text-transform:uppercase; margin-top:2px; }
+    .nav__inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:nowrap; }
+    .nav__burger { background:rgba(255,255,255,0.09); border:1px solid rgba(255,255,255,0.16); border-radius:9px; cursor:pointer; padding:9px 10px; display:flex; flex-direction:column; gap:5px; -webkit-tap-highlight-color:transparent; flex-shrink:0; transition:background 0.2s; }
+    .nav__burger span { display:block; width:20px; height:2px; background:rgba(255,255,255,0.88); border-radius:2px; transition:transform 0.25s ease,opacity 0.2s ease; pointer-events:none; }
+    .nav__burger.is-open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+    .nav__burger.is-open span:nth-child(2) { opacity:0; }
+    .nav__burger.is-open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+    .nav__menu { max-height:0; overflow:hidden; background:rgba(18,44,28,0.98); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); transition:max-height 0.38s cubic-bezier(0.4,0,0.2,1); border-top:1px solid rgba(255,255,255,0.06); }
+    .nav__menu.is-open { max-height:460px; }
+    .nav__menu-inner { padding:12px 0 24px; display:flex; flex-direction:column; gap:2px; }
+    .nav__mlink { color:rgba(255,255,255,0.80); text-decoration:none; font-size:1rem; font-weight:600; padding:13px 16px; border-radius:10px; transition:background 0.15s,color 0.15s; display:block; -webkit-tap-highlight-color:transparent; }
+    .nav__mlink:hover { background:rgba(255,255,255,0.09); color:#fff; text-decoration:none; }
+    .nav__mshare { background:rgba(122,232,154,0.12); border:1px solid rgba(122,232,154,0.26); color:#7AE89A; font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:600; padding:13px 16px; border-radius:10px; cursor:pointer; text-align:left; width:100%; transition:background 0.15s; -webkit-tap-highlight-color:transparent; }
+    .nav__mdiv { height:1px; background:rgba(255,255,255,0.07); margin:8px 16px; }
+    .nav__mcontact { color:rgba(255,255,255,0.42); text-decoration:none; font-size:0.82rem; padding:8px 16px; display:block; }
+    .nav__mtag { font-size:0.7rem; color:rgba(255,255,255,0.20); padding:4px 16px; margin:0; }
   </style>
 </head>
 <body>
@@ -136,30 +53,34 @@
     <button id="disclaimer-banner__close" aria-label="Dismiss">✕</button>
   </div>
 
-  <!-- NAV -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="container nav__inner">
-      <a href="index.html" class="nav__brand" aria-label="ProxiHealth home">
-        <div class="nav__logo">🏥</div>
-        <span class="nav__title">ProxiHealth</span>
+      <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;" aria-label="ProxiHealth home">
+        <div class="brand-mark">
+          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="10" fill="url(#lgE)"/>
+            <defs><linearGradient id="lgE" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#6DD48A"/><stop offset="100%" stop-color="#2D5F3F"/></linearGradient></defs>
+            <text x="7" y="24" font-family="Georgia,serif" font-size="17" font-weight="700" fill="white" letter-spacing="-1">Px</text>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">ProxiHealth</span>
+          <span class="brand-sub">Emergency &middot; Africa</span>
+        </div>
       </a>
-      <!-- Hamburger button -->
       <button class="nav__burger" id="nav-burger" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
-    <!-- Slide-down menu -->
-    <div class="nav__menu" id="nav-menu" aria-hidden="true">
-      <div class="container nav__menu__inner">
-        <a href="emergency.html" class="nav__menu__link">🚨 Emergency Protocols</a>
-        <a href="triage.html"    class="nav__menu__link">🌡️ Symptom Check</a>
-        <a href="index.html"     class="nav__menu__link">🏠 Home</a>
-        <button class="nav__menu__share" id="nav-share-btn">
-          🔗 Share ProxiHealth
-        </button>
-        <div class="nav__menu__divider"></div>
-        <a href="mailto:louisnkan21@gmail.com" class="nav__menu__link nav__menu__link--sm">✉️ Contact: louisnkan21@gmail.com</a>
-        <p class="nav__menu__tagline">AI emergency guidance for Africa · Free · Offline</p>
+    <div class="nav__menu" id="nav-menu">
+      <div class="container nav__menu-inner">
+        <a href="emergency.html" class="nav__mlink">&#128680; Emergency Protocols</a>
+        <a href="triage.html"    class="nav__mlink">&#127777; Symptom Check</a>
+        <a href="index.html"     class="nav__mlink">&#127968; Home</a>
+        <button class="nav__mshare" id="nav-share-btn">&#128279; Share ProxiHealth</button>
+        <div class="nav__mdiv"></div>
+        <a href="mailto:louisnkan21@gmail.com" class="nav__mcontact">&#9993; Contact</a>
+        <p class="nav__mtag">AI emergency guidance for Africa &middot; Free &middot; Offline</p>
       </div>
     </div>
   </nav>
@@ -229,5 +150,64 @@
   <script src="js/security.js"></script>
   <script src="js/app.js"></script>
   <script src="js/triage.js"></script>
+  <script>
+  (function () {
+    var burger = document.getElementById("nav-burger");
+    var menu   = document.getElementById("nav-menu");
+    if (!burger || !menu) return;
+    burger.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = menu.classList.toggle("is-open");
+      burger.classList.toggle("is-open", open);
+      burger.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function (e) {
+      if (!burger.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.remove("is-open"); burger.classList.remove("is-open");
+        burger.setAttribute("aria-expanded", "false");
+      }
+    });
+    var sb = document.getElementById("nav-share-btn");
+    if (sb) { sb.addEventListener("click", function () {
+      var url = "https://louisnkan.github.io/ProxiHealth/";
+      if (navigator.share) { navigator.share({title:"ProxiHealth",text:"Free AI emergency protocols for Africa",url:url}); }
+      else if (navigator.clipboard) { navigator.clipboard.writeText(url).then(function(){ sb.textContent="Link copied!"; setTimeout(function(){sb.textContent="Share ProxiHealth";},2500); }); }
+    }); }
+  }());
+  </script>
+  <script>
+  (function () {
+    var burger = document.getElementById('nav-burger');
+    var menu   = document.getElementById('nav-menu');
+    if (!burger || !menu) { return; }
+    burger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var isOpen = menu.classList.toggle('is-open');
+      burger.classList.toggle('is-open', isOpen);
+      burger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.classList.contains('is-open')) { return; }
+      if (burger.contains(e.target) || menu.contains(e.target)) { return; }
+      menu.classList.remove('is-open');
+      burger.classList.remove('is-open');
+      burger.setAttribute('aria-expanded', 'false');
+    });
+    var sb = document.getElementById('nav-share-btn');
+    if (sb) {
+      sb.addEventListener('click', function () {
+        var url = 'https://louisnkan.github.io/ProxiHealth/';
+        if (navigator.share) {
+          navigator.share({ title: 'ProxiHealth', text: 'Free AI emergency protocols for Africa', url: url });
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(url).then(function () {
+            sb.textContent = 'Link copied!';
+            setTimeout(function () { sb.textContent = 'Share ProxiHealth'; }, 2500);
+          });
+        }
+      });
+    }
+  }());
+  </script>
 </body>
 </html>
